@@ -149,6 +149,74 @@ final class ReponseController extends AbstractController
         ]);
     }
 
+    #[Route('/reponse/update/{id}', name:'update_response', methods: ['GET', 'POST'])]
+    public function updateResponse(Request $request, int $id, EntityManagerInterface $entityManager): Response
+    {
+        // Fetch the response based on its ID
+        $reponse = $entityManager->getRepository(Reponse::class)->find($id);
+
+        if (!$reponse) {
+            throw $this->createNotFoundException('Response not found');
+        }
+        $avis = $reponse->getAvis();
+
+        // Check if the logged-in user is the owner of the response
+        if ($this->getUser() !== $reponse->getAvis()->getUser()) {
+
+            throw $this->createAccessDeniedException('You cannot edit this response.');
+        }
+
+        // Create the form for updating the response
+        $form = $this->createForm(ReponseType::class, $reponse);
+
+        // Handle form submission
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Update the response (flush the changes)
+            $entityManager->flush();
+
+            // Redirect to the corresponding avis page after successful update
+            return $this->redirectToRoute('avis_details', ['avisId' => $reponse->getAvis()->getRef()]);
+        }
+
+        // Render the update form on the same page
+        return $this->render('reponse/edit.html.twig', [
+            'form' => $form->createView(),
+            'reponse' => $reponse,
+        ]);
+    }
+
+    // src/Controller/ResponseController.php
+
+    // src/Controller/ResponseController.php
+
+    // src/Controller/ResponseController.php
+
+    #[Route('/reponse/delete/{id}', name: 'delete_response', methods: ['POST'])]
+    public function deleteResponse(int $id, EntityManagerInterface $entityManager): Response
+    {
+        // Fetch the response based on its ID
+        $reponse = $entityManager->getRepository(Reponse::class)->find($id);
+
+        if (!$reponse) {
+            throw $this->createNotFoundException('Response not found');
+        }
+
+        // Check if the logged-in user is the owner of the response
+        if ($this->getUser() !== $reponse->getProfessional()) {
+            throw $this->createAccessDeniedException('You cannot delete this response.');
+        }
+
+        // Delete the response from the database
+        $entityManager->remove($reponse);
+        $entityManager->flush();
+
+        // Redirect back to the avis details page after deletion
+        return $this->redirectToRoute('avis_details', ['avisId' => $reponse->getAvis()->getId()]);
+    }
+
+
+
 
 
 

@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ReponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ReponseRepository::class)]
 class Reponse
@@ -15,13 +17,20 @@ class Reponse
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La reponse ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "La reponse doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le commentaire ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $reponse = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_reponse = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false, name: 'id_avis', referencedColumnName: 'ref')]
+    #[ORM\JoinColumn(nullable: false, name: 'id_avis', referencedColumnName: 'ref' , onDelete: 'CASCADE')]
     private ?Avis $avis = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]

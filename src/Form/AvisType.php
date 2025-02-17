@@ -22,25 +22,31 @@ class AvisType extends AbstractType
             ->add('commentaire')
             ->add('date_avis', null, [
                 'widget' => 'single_text',
-            ])
-            ->add('professional', EntityType::class, [
+            ]);
+
+        // Ajouter le champ 'professional' uniquement lors de la création
+        if (!$options['is_edit']) {
+            $builder->add('professional', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'nom',
                 'label' => 'Choisir un professionnel',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->where("u.roles LIKE :role")
-                        ->setParameter('role', '%ROLE_PRO%'); // Searches for ROLE_PRO inside JSON array
+                        ->setParameter('role', '%ROLE_PRO%');
                 },
                 'placeholder' => 'Sélectionner un professionnel',
-            ])
-            ->add('submit', SubmitType::class, ['label' => 'Ajouter']);
+            ]);
+        }
+
+        $builder->add('submit', SubmitType::class, ['label' => 'Ajouter']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Avis::class,
+            'is_edit' => false, // Définir l'option par défaut
         ]);
     }
 }

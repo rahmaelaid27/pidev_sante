@@ -103,6 +103,38 @@ final class AvisController extends AbstractController
         return $this->redirectToRoute('app_avis_list');
     }
 
+    #[Route('/edit/{avisId}', name: 'edit_avis')]
+    public function edit(
+        Request $request,
+        AvisRepository $avisRepository,
+        EntityManagerInterface $entityManager,
+        $avisId
+    ): Response {
+        $avis = $avisRepository->find($avisId);
+
+        // Vérifier si l'avis existe et appartient à l'utilisateur connecté
+        if (!$avis || $this->getUser() !== $avis->getUser()) {
+            $this->addFlash('error', 'Vous ne pouvez pas modifier cet avis.');
+            return $this->redirectToRoute('app_avis_list');
+        }
+
+        // Créer le formulaire d'édition
+        $form = $this->createForm(AvisType::class, $avis, ['is_edit' => true]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Avis mis à jour avec succès.');
+            return $this->redirectToRoute('app_avis_list');
+        }
+
+        return $this->render('avis/edit.html.twig', [
+            'form' => $form->createView(),
+            'avis' => $avis
+        ]);
+    }
+
+
 
 //    #[Route('/{id}', name: 'app_avis_show', methods: ['GET'])]
 //    public function show(Avis $avi): Response
