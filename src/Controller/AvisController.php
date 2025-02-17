@@ -81,6 +81,28 @@ final class AvisController extends AbstractController
             'reponses' => $reponses,
         ]);
     }
+    #[Route('/delete/{avisId}', name: 'delete_avis')]
+    public function delete(AvisRepository $avisRepository, EntityManagerInterface $entityManager, $avisId): RedirectResponse
+    {
+        // Fetch the review by its ID
+        $avis = $avisRepository->find($avisId);
+
+        if ($avis && $this->getUser() === $avis->getUser()) {
+            // Remove the review from the database if it belongs to the logged-in user
+            $entityManager->remove($avis);
+            $entityManager->flush();
+
+            // Add a flash message to confirm the deletion
+            $this->addFlash('success', 'Review deleted successfully.');
+        } else {
+            // Add a flash message for permission issues or non-existing review
+            $this->addFlash('error', 'You are not allowed to delete this review or it does not exist.');
+        }
+
+        // Redirect back to the review list page
+        return $this->redirectToRoute('app_avis_list');
+    }
+
 
 //    #[Route('/{id}', name: 'app_avis_show', methods: ['GET'])]
 //    public function show(Avis $avi): Response
