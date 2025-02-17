@@ -1,0 +1,38 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Add Consultation{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; padding: 50px 0;">
+        <div class="card shadow-lg p-5 rounded-4" style="max-width: 600px; width: 100%; background: #ffffff;">
+            <h2 class="text-center text-primary mb-4">Add Consultation</h2>
+
+            {{ form_start(form) }}
+
+            <!-- Date Consultation Field -->
+            <div class="mb-4">
+                {{ form_label(form.date_consultation, 'Consultation Date', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.date_consultation, {'attr': {'class': 'form-control', 'placeholder': 'Select consultation date'}}) }}
+                {% if form.date_consultation.vars.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.date_consultation.vars.errors %}
+                            <p>{{ error.message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2 mb-4">
+                <button type="submit" class="btn btn-primary py-2 fs-5">Save Consultation</button>
+            </div>
+
+            {{ form_end(form) }}
+
+            <!-- Back to Appointments Button -->
+            <div class="text-center mt-3">
+                <a href="{{ path('app_professional_rendezvous') }}" class="btn btn-outline-secondary w-100 py-2">⬅ Back to Appointments</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

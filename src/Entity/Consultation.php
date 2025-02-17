@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\ConsultationRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\User;
+
+
+#[ORM\Entity(repositoryClass: ConsultationRepository::class)]
+class Consultation
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message: "La date de consultation ne peut pas être vide.")]
+    #[Assert\Type(type: "\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+    private ?\DateTimeInterface $date_consultation = null;
+
+    #[Assert\NotNull(message: "Le patient doit être sélectionné.")]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name: 'id_user', referencedColumnName: 'ref')]
+    private ?User $user = null;
+
+    #[Assert\NotNull(message: "Le professionnel de santé doit être sélectionné.")]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, name: 'id_professionnel', referencedColumnName: 'ref')]
+    private ?User $professionnel = null;
+
+    #[ORM\OneToOne(targetEntity: RendezVous::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?RendezVous $rendezVous = null;
+
+    #[ORM\OneToMany(targetEntity: Prescription::class, mappedBy: "consultation", cascade: ['remove'], orphanRemoval: true)]
+    private Collection $prescriptions;
+
+    public function __construct()
+    {
+        $this->prescriptions = new ArrayCollection();
+    }
+
+    public function getRendezVous(): ?RendezVous
+    {
+        return $this->rendezVous;
+    }
+
+    public function setRendezVous(?RendezVous $rendezVous): void
+    {
+        $this->rendezVous = $rendezVous;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDateConsultation(): ?\DateTimeInterface
+    {
+        return $this->date_consultation;
+    }
+
+    public function setDateConsultation(?\DateTimeInterface $date_consultation): static
+    {
+        $this->date_consultation = $date_consultation;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function getProfessionnel(): ?User
+    {
+        return $this->professionnel;
+    }
+
+    public function setProfessionnel(?User $professionnel): static
+    {
+        $this->professionnel = $professionnel;
+        return $this;
+    }
+
+    public function getPrescriptions(): Collection
+    {
+        return $this->prescriptions;
+    }
+
+    public function addPrescription(Prescription $prescription): static
+    {
+        if (!$this->prescriptions->contains($prescription)) {
+            $this->prescriptions->add($prescription);
+            $prescription->setConsultation($this);
+        }
+        return $this;
+    }
+
+    public function removePrescription(Prescription $prescription): static
+    {
+        if ($this->prescriptions->removeElement($prescription)) {
+            if ($prescription->getConsultation() === $this) {
+                $prescription->setConsultation(null);
+            }
+        }
+        return $this;
+    }
+}

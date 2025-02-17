@@ -1,0 +1,53 @@
+{# templates/consultation/list.html.twig #}
+{% extends 'front.html.twig' %}
+
+{% block title %}Consultations List{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Consultations and Prescriptions</h2>
+
+        {% if consultations is empty %}
+            <div class="alert alert-info text-center" role="alert">
+                No consultations available at the moment.
+            </div>
+        {% else %}
+            {% for consultation in consultations %}
+                <div class="card shadow-lg mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Consultation Date: {{ consultation.dateConsultation|date('d/m/Y H:i') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Patient:</strong> {{ consultation.user.nom }}</p>
+
+                        {% if consultation.prescriptions|length > 0 %}
+                            <h6 class="mt-4">Prescriptions :</h6>
+                            <ul class="list-group">
+                                {% for prescription in consultation.prescriptions %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>{{ prescription.description }}</strong>
+
+                                        {# Delete button with trash icon #}
+                                        <form action="{{ path('prescription_delete', { 'id': prescription.id }) }}" method="post" style="display:inline;">
+                                            <button type="submit" style="background-color: red; padding: 0.2rem 0.5rem;" class="btn btn-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                </svg>
+                                            </button>
+
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="alert alert-info text-center mt-3" role="alert">
+                                No prescriptions available for this consultation.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

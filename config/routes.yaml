@@ -3,3 +3,16 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+# In routes.yaml or annotations
+app_accept_rdv:
+    path: /accept-rdv/{id}
+    controller: App\Controller\RendezVousController::acceptRdv
+
+app_reject_rdv:
+    path: /reject-rdv/{id}
+    controller: App\Controller\RendezVousController::rejectRdv
+
+app_add_consultation:
+    path: /add-consultation/{id}
+    controller: App\Controller\ConsultationController::addConsultation

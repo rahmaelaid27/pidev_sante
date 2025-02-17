@@ -1,0 +1,51 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}My Consultations{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; padding: 50px 0;">
+        <div class="card shadow-lg p-4 rounded-4" style="max-width: 100%; width: 100%; background: #ffffff;">
+            <h2 class="text-center text-primary mb-4">My Consultations</h2>
+
+            {% if consultations is empty %}
+                <div class="alert alert-info text-center" role="alert">
+                    You have no consultations at the moment.
+                </div>
+            {% else %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Patient Name</th>
+                        <th>Statut rendez vous</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for consultation in consultations %}
+                        <tr>
+                            <td>{{ consultation.id }}</td>
+                            <td>{{ consultation.getDateConsultation()|date('d/m/Y H:i') }}</td>
+                            <td>{{ consultation.getUser().getNom() }}</td>
+                            <td>{{ consultation.getRendezVous().getStatusRdv() }}</td>
+
+                            <td>
+                                <a href="{{ path('app_edit_consultation', {'id': consultation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ path('app_delete_consultation', {'id': consultation.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this consultation?')">Delete</a>
+
+                                    <a href="{{ path('consultation_add_prescription', { id: consultation.id }) }}" class="btn btn-danger btn-sm">Add Prescription</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            <div class="text-center mt-3">
+{#                <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary w-100 py-2">⬅ Return to Dashboard</a>#}
+            </div>
+        </div>
+    </div>
+{% endblock %}

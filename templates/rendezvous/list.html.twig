@@ -1,0 +1,54 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Liste des Rendez-vous{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh; padding: 20px 0;">
+        <div class="card shadow-lg p-4 rounded-4 w-100" style="max-width: 1100px; background: #ffffff;">
+            <h2 class="text-center text-primary mb-4">📋 Liste des Rendez-vous</h2>
+
+            {% if rendezVousList is empty %}
+                <div class="alert alert-info text-center fs-5">Aucun rendez-vous enregistré.</div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle fs-5">
+                        <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 25%;">Date</th>
+                            <th style="width: 20%;">Statut</th>
+                            <th style="width: 25%;">Professionnel</th>
+                            <th style="width: 25%;">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for rdv in rendezVousList %}
+                            <tr>
+                                <td class="text-center fw-bold">{{ rdv.id }}</td>
+                                <td class="text-center">{{ rdv.dateRdv|date('d/m/Y') }}</td>
+                                <td class="text-center">
+                                        <span class="badge px-3 py-2
+                                            {% if rdv.statusRdv == 'confirmé' %}bg-success
+                                            {% elseif rdv.statusRdv == 'annulé' %}bg-danger
+                                            {% else %}bg-warning text-dark{% endif %}">
+                                            {{ rdv.statusRdv|capitalize }}
+                                        </span>
+                                </td>
+                                <td class="text-center fw-semibold">{{ rdv.professional.nom ?? 'N/A' }}</td>
+{#                                <td class="text-center">#}
+{#                                    <a href="{{ path('app_rendezvous_edit', {'id': rdv.id}) }}" class="btn btn-outline-primary btn-lg">✏ Modifier</a>#}
+{#                                    <a href="{{ path('app_rendezvous_delete', {'id': rdv.id}) }}" class="btn btn-outline-danger btn-lg" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous ?');">🗑 Supprimer</a>#}
+{#                                </td>#}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+{#                <a href="{{ path('app_rendezvous_create') }}" class="btn btn-primary w-100 py-3 fs-5">➕ Ajouter un Rendez-vous</a>#}
+            </div>
+        </div>
+    </div>
+{% endblock %}

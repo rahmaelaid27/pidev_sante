@@ -63,20 +63,18 @@
                         <div class="main-menu">
                             <nav class="navigation">
                                 <ul class="nav menu">
-                                    <li class="active"><a href="#">Home</a></li>
-                                    <li><a href="#">Doctors</a></li>
-                                    <li><a href="#">Services</a></li>
-                                    <li><a href="#">Pages <i class="icofont-rounded-down"></i></a>
-                                        <ul class="dropdown">
-                                            <li><a href="#">404 Error</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
-                                        <ul class="dropdown">
-                                            <li><a href="#">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Contact Us</a></li>
+
+                                    <li><a href="{{ path('app_professional_rendezvous') }}">Mes Rendez vous</a></li>
+                                    <li><a href="{{ path('app_professional_consultations') }}">Mes consultations</a></li>
+                                    <li><a href="{{ path('presecriptions_list') }}">Préscriptions</a></li>
+                                    <li><a href="{{ path('app_rendezvous_new') }}">Ajouter Rendez vous</a></li>
+
+{#                                    <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>#}
+{#                                        <ul class="dropdown">#}
+{#                                            <li><a href="#">Blog Details</a></li>#}
+{#                                        </ul>#}
+{#                                    </li>#}
+{#                                    <li><a href="#">Contact Us</a></li>#}
                                 </ul>
                             </nav>
                         </div>
