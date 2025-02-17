@@ -1,0 +1,18 @@
+{# templates/security/login.html.twig #}
+
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+<form action="{{ path('app_login') }}" method="post">
+    <label for="username">Email:</label>
+    <input type="text" id="username" name="email" value="{{ last_username }}">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+
+    {# CSRF token for security #}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <button type="submit">Login</button>
+</form>

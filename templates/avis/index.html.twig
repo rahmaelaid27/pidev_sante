@@ -1,0 +1,111 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+    <div class="page-inner">
+        {% block Table %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Liste des Avis</h4>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="avis-table" class="display table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Utilisateur</th>
+                                        <th>Professionnel</th>
+                                        <th>Note</th>
+                                        <th>Commentaire</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for avis in avisList %}
+                                        <tr>
+                                            <td>{{ avis.user.nom }}</td>
+                                            <td>{{ avis.professional.nom }}</td>
+                                            <td>{{ avis.note }}</td>
+                                            <td>{{ avis.commentaire }}</td>
+                                            <td>{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-start align-items-center">
+                                                    <!-- View Details Button -->
+                                                    <a href="{{ path('avis_details', {'avisId': avis.ref }) }}" class="btn btn-info ">View Details</a>
+
+                                                    <!-- Respond Button -->
+                                                    <td>
+                                                        <div class="d-flex justify-content-start align-items-center">
+                                                            <!-- Respond Button -->
+                                                            <a href="{{ path('respond_avis', {'avisId': avis.ref }) }}" class="btn btn-primary ">Respond</a>
+                                                        </div>
+                                                    </td>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="5">Aucun avis disponible</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        <!-- Modal for Responding to Avis -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Respond to Feedback</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% if form is defined %}
+                            {{ form_start(form, {'action': path('respond_avis', {'avisId': 0}), 'attr': {'id': 'response-form'}}) }}
+                            {{ form_row(form.reponse) }}
+                            <div class="mt-3">
+                                <button type="button" class="btn-secondary btn" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Save changes</button>
+                            </div>
+                            {{ form_end(form) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to dynamically set the form action -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('exampleModalCenter');
+            modal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const avisId = button.getAttribute('data-avis-id'); // Get the Avis ID from the button
+                const form = document.getElementById('response-form');
+
+                console.log("Avis ID from button: " + avisId); // Log the ID to verify
+
+                if (avisId) {
+                    const updatedAction = form.action.replace('/0', '/' + avisId);
+                    console.log("Updated form action: " + updatedAction); // Log updated form action
+                    form.action = updatedAction; // Update the form's action URL
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}
