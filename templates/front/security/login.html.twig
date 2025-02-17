@@ -1,0 +1,59 @@
+{% extends 'front/base_front.html.twig' %}
+
+{% block title %}Connexion - MediPlus{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Se connecter</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <!-- Vérification si l'utilisateur est déjà connecté -->
+            {% if app.user %}
+                <div class="alert alert-info text-center">
+                    Vous êtes déjà connecté en tant que {{ app.user.email }}.
+                    <a href="{{ path('front_logout') }}" class="btn btn-danger btn-sm">Déconnexion</a>
+                </div>
+            {% else %}
+
+                <!-- Messages d'erreur -->
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+
+                <form method="post">
+                    <!-- Token CSRF pour la sécurité -->
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <!-- Champ Email -->
+                    <div class="form-group mt-3">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="_username" class="form-control" required>
+                    </div>
+
+                    <!-- Champ Mot de passe -->
+                    <div class="form-group mt-3">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="_password" class="form-control" required>
+                    </div>
+
+                    <!-- Bouton de connexion -->
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Connexion</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{{ path('front_register') }}">Pas encore de compte ? Inscrivez-vous</a>
+                </div>
+
+                <div class="text-center mt-3">
+                   <a href="{{ path('front_forgot_password') }}">Mot de passe oublié ?</a>
+                </div>
+
+                
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
