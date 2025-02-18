@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <a href="{{ path('bloc.create') }}">Add Bloc</a>
+    <table style="width:100% ; border: 1px">
+    <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Statut</th>
+        <th>Action</th>
+    </tr>
+    {% for bloc in blocs %}
+        <tr>
+            <th>{{ bloc.id }}</th>
+            <th>{{ bloc.nom }}</th>
+            <th>{{ bloc.description }}</th>
+            <th>{{ bloc.statut }}</th>
+            <th>
+                <a href="{{ path('bloc.edit',{id: bloc.id}) }}">Edit</a>
+                <a href="{{ path('bloc.delete' , {id: bloc.id}) }}">Delete</a>
+            </th>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{
+  "name": "pidev_sante",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahmaelaid27/pidev_sante.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rahmaelaid27/pidev_sante/issues"
+  },
+  "homepage": "https://github.com/rahmaelaid27/pidev_sante#readme",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.0.1"
+  }
+}
