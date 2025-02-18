@@ -1,0 +1,49 @@
+<h1 class="text-center">Créer un Rendez-Vous</h1>
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success text-center">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="container d-flex justify-content-center mt-4">
+    <div class="card p-4 shadow-sm" style="max-width: 50%; width: 100%;">
+        {{ form_start(form, { 'attr': { 'novalidate': 'novalidate' } }) }} <!-- Disable HTML validation -->
+
+        <div class="form-group mb-3">
+            {{ form_label(form.id_patient, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.id_patient, {'attr': {'class': 'form-control'}}) }}
+            {% if form.id_patient.vars.errors|length > 0 %}
+                <div class="text-danger">
+                    {{ form_errors(form.id_patient) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.date_rendez_vous, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.date_rendez_vous, {'attr': {'class': 'form-control'}}) }}
+            {% if form.date_rendez_vous.vars.errors|length > 0 %}
+                <div class="text-danger">
+                    {{ form_errors(form.date_rendez_vous) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.statu_paiement, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.statu_paiement, {'attr': {'class': 'form-control'}}) }}
+            {% if form.statu_paiement.vars.errors|length > 0 %}
+                <div class="text-danger">
+                    {{ form_errors(form.statu_paiement) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>

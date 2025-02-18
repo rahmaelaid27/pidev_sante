@@ -1,0 +1,41 @@
+<h1 class="text-center">Créer une Facture</h1>
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success text-center">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="container d-flex justify-content-center mt-4">
+    <div class="card p-4 shadow-sm" style="max-width: 50%; width: 100%;">
+        {{ form_start(form, { 'attr': { 'novalidate': 'novalidate', 'class': 'needs-validation' } }) }} <!-- Disable HTML validation -->
+
+        <div class="form-group mb-3">
+            {{ form_label(form.montant, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.montant, {'attr': {'class': 'form-control'}}) }}
+            {% if form.montant.vars.errors|length > 0 %}
+                <div class="text-danger">
+                    {{ form_errors(form.montant) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.date, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+            {% if form.date.vars.errors|length > 0 %}
+                <div class="text-danger">
+                    {{ form_errors(form.date) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Enregistrer
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
