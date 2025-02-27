@@ -1,14 +1,13 @@
 <?php
-// src/Form/PrescriptionType.php
 
 namespace App\Form;
 
 use App\Entity\Prescription;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PrescriptionType extends AbstractType
 {
@@ -16,10 +15,13 @@ class PrescriptionType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'Prescription description is required.']),
+                ],
                 'label' => 'Prescription Description',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter prescription details']
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter prescription details'],
             ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

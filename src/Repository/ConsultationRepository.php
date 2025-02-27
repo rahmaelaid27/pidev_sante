@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Consultation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,26 @@ class ConsultationRepository extends ServiceEntityRepository
         parent::__construct($registry, Consultation::class);
     }
 
-    //    /**
-    //     * @return Consultation[] Returns an array of Consultation objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByProfessionalAndDateBeforeToday(User $professional): array
+    {
+        $today = new \DateTime('today');
 
-    //    public function findOneBySomeField($value): ?Consultation
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.professionnel = :professional')
+            ->andWhere('c.date_consultation < :today')
+            ->setParameter('professional', $professional)
+            ->setParameter('today', $today)
+            ->orderBy('c.date_consultation', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByDate($date)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.date_consultation = :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
 }

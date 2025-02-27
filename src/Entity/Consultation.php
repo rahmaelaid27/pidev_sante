@@ -20,8 +20,7 @@ class Consultation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\NotBlank(message: "La date de consultation ne peut pas être vide.")]
-    #[Assert\Type(type: "\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+//    #[Assert\NotBlank(message: 'This field cannot be blank.')]
     private ?\DateTimeInterface $date_consultation = null;
 
     #[Assert\NotNull(message: "Le patient doit être sélectionné.")]
@@ -40,6 +39,23 @@ class Consultation
 
     #[ORM\OneToMany(targetEntity: Prescription::class, mappedBy: "consultation", cascade: ['remove'], orphanRemoval: true)]
     private Collection $prescriptions;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+//    #[Assert\NotNull(message: "Ce champ ne peut pas être null.")]
+//    #[Assert\NotBlank(message: "Ce champ ne peut pas être vide.")]
+//    #[Assert\Length(min: 3, minMessage: "Le motif doit contenir au moins {{ limit }} caractères.")]
+    private ?string $reason = null;
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): void
+    {
+        $this->reason = $reason;
+    }
+
 
     public function __construct()
     {
@@ -117,4 +133,8 @@ class Consultation
         }
         return $this;
     }
+
+
+
+
 }

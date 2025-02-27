@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordonnance Médicale</title>
+    <style>
+        body {
+            font-family: Garamond, serif;
+            margin: 30px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .subheader {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .patient-info, .prescription-info {
+            margin-bottom: 20px;
+        }
+        .patient-info span, .prescription-info span {
+            font-weight: bold;
+        }
+        .prescription-description {
+            margin-top: 20px;
+            border-top: 2px solid #000;
+            padding-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+<div class="header">Ordonnance Médicale</div>
+<div class="subheader">Médecin : {{ professionalName }}</div>
+
+<div class="patient-info">
+    <p><span>Nom du patient:</span> {{ patientName }}</p>
+    <p><span>Date:</span> {{ date }}</p>
+</div>
+
+<div class="prescription-info">
+    <p><span>Description de la prescription:</span></p>
+    <div class="prescription-description">
+        <p>{{ prescriptionDescription }}</p>
+    </div>
+</div>
+
+<p><em>Merci de suivre cette prescription à la lettre. Pour toute question, veuillez contacter votre médecin.</em></p>
+
+</body>
+</html>

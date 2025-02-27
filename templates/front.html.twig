@@ -21,7 +21,8 @@
         <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-        
+        <link rel="stylesheet" href="{{ asset('css/notVisited.css') }}">
+
     {% endblock %}
 </head>
 <body>
@@ -64,17 +65,30 @@
                             <nav class="navigation">
                                 <ul class="nav menu">
 
-                                    <li><a href="{{ path('app_professional_rendezvous') }}">Mes Rendez vous</a></li>
-                                    <li><a href="{{ path('app_professional_consultations') }}">Mes consultations</a></li>
-                                    <li><a href="{{ path('presecriptions_list') }}">Préscriptions</a></li>
-                                    <li><a href="{{ path('app_rendezvous_new') }}">Ajouter Rendez vous</a></li>
+                                    <li><a href="#">Home</a></li>
+                                    <li><a href="#">About</a></li>
 
-{#                                    <li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>#}
-{#                                        <ul class="dropdown">#}
-{#                                            <li><a href="#">Blog Details</a></li>#}
-{#                                        </ul>#}
-{#                                    </li>#}
-{#                                    <li><a href="#">Contact Us</a></li>#}
+                                    {% if app.user.getRoles() == ["ROLE_PATIENT"] %}
+
+                                        <li><a href="#">Rendez vous<i class="icofont-rounded-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="{{ path('app_rendezvous_new') }}">Ajouter Rendez vous</a></li>
+                                                <li><a href="{{ path('app_professional_rendezvous') }}">Mes Rendez vous</a></li>
+                                            </ul>
+                                        </li>
+                                    {% else %}
+                                        <li><a href="#">Doctors</a></li>
+                                    {% endif %}
+
+                                    <li><a href="#">consultations<i class="icofont-rounded-down"></i></a>
+                                        <ul class="dropdown">
+                                            <li><a href="{{ path('app_professional_consultations') }}">Mes consultations</a></li>
+                                            <li><a href="{{ path('presecriptions_list') }}">Préscriptions</a></li>
+                                            <li><a href="{{ path('app_history') }}">History</a></li>
+
+                                        </ul>
+                                    </li>
+
                                 </ul>
                             </nav>
                         </div>

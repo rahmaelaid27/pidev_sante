@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Form\ConsultationType;
 use App\Repository\ConsultationRepository;
+use App\Repository\PrescriptionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,20 +19,18 @@ class ConsultationController extends AbstractController
     #[Route('/consultation/{id}/create', name: 'app_add_consultation')]
     public function addConsultation(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Retrieve the RendezVous using the provided ID
         $rendezVous = $entityManager->getRepository(RendezVous::class)->find($id);
 
         if (!$rendezVous) {
             throw $this->createNotFoundException('No rendezvous found for id ' . $id);
         }
 
-        // Create a new consultation and set the user and professionnel from the RendezVous
+
         $consultation = new Consultation();
         $consultation->setRendezVous($rendezVous);
-        $consultation->setUser($rendezVous->getUser()); // Assuming the "user" field is associated with RendezVous
-        $consultation->setProfessionnel($rendezVous->getProfessional()); // Assuming the "professionnel" field is associated with RendezVous
+        $consultation->setUser($rendezVous->getUser());
+        $consultation->setProfessionnel($rendezVous->getProfessional());
 
-        // Handle form submission
         $form = $this->createForm(ConsultationType::class, $consultation);
         $form->handleRequest($request);
 
@@ -50,11 +49,46 @@ class ConsultationController extends AbstractController
     }
 
     #[Route('/professional/consultations', name: 'app_professional_consultations')]
-    public function listConsultations(ConsultationRepository $consultationRepository): Response
+    public function listConsultations(ConsultationRepository $consultationRepository, Request $request): Response
     {
-        // Fetch consultations related to the logged-in professional
-        $user = $this->getUser(); // Assuming the professional is logged in
-        $consultations = $consultationRepository->findBy(['professionnel' => $user]); // Assuming 'professional' field in Consultation entity
+        $user = $this->getUser();
+        $sortBy = $request->query->get('sort_by', 'date_consultation'); 
+        $order = $request->query->get('order', 'ASC');
+        $selectedDate = $request->query->get('selected_date');
+
+        $queryBuilder = $consultationRepository->createQueryBuilder('c')
+            ->leftJoin('c.rendezVous', 'r')
+            ->leftJoin('c.user', 'u')
+            ->andWhere('c.professionnel = :user')
+            ->setParameter('user', $user);
+
+            if ($sortBy === 'rendezVous.status_rdv') {
+                $queryBuilder->orderBy('r.status_rdv', $order); 
+            } elseif ($sortBy === 'user.nom') {
+                $queryBuilder->orderBy('u.nom', $order);
+            } else {
+                $queryBuilder->orderBy('c.' . $sortBy, $order);
+            }
+
+        if ($selectedDate) {
+            $formattedDate = \DateTime::createFromFormat('m/d/Y', $selectedDate);
+
+            if ($formattedDate) {
+                $startOfDay = clone $formattedDate;
+                $startOfDay->setTime(0, 0, 0);
+
+                $endOfDay = clone $formattedDate;
+                $endOfDay->setTime(23, 59, 59);
+
+
+                $queryBuilder->andWhere('c.date_consultation BETWEEN :startOfDay AND :endOfDay')
+                    ->setParameter('startOfDay', $startOfDay)
+                    ->setParameter('endOfDay', $endOfDay);
+            }
+        }
+
+        $consultations = $queryBuilder->getQuery()->getResult();
+
 
         return $this->render('consultation/list.html.twig', [
             'consultations' => $consultations,
@@ -65,20 +99,16 @@ class ConsultationController extends AbstractController
     #[Route('/consultation/delete/{id}', name: 'app_delete_consultation')]
     public function delete(int $id, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        // Retrieve the consultation object by its ID
         $consultation = $entityManager->getRepository(Consultation::class)->find($id);
 
         if (!$consultation) {
-            // If no consultation is found, flash a message and redirect to the consultations page
             $this->addFlash('error', 'Consultation not found!');
             return $this->redirectToRoute('app_dashboard');
         }
 
-        // Remove the consultation
         $entityManager->remove($consultation);
         $entityManager->flush();
 
-        // Flash success message and redirect
         $this->addFlash('success', 'Consultation deleted successfully.');
         return $this->redirectToRoute('app_dashboard');
 
@@ -87,25 +117,20 @@ class ConsultationController extends AbstractController
     #[Route('/consultation/edit/{id}', name: 'app_edit_consultation')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Retrieve the consultation object by its ID
         $consultation = $entityManager->getRepository(Consultation::class)->find($id);
 
         if (!$consultation) {
-            // If no consultation is found, flash a message and redirect
             $this->addFlash('error', 'Consultation not found!');
             return $this->redirectToRoute('app_dashboard');
         }
 
-        // Create and handle the form
         $form = $this->createForm(ConsultationType::class, $consultation);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // If the form is submitted and valid, persist the changes
             $entityManager->flush();
 
-            // Flash success message and redirect back to the same page with updated data
             $this->addFlash('success', 'Consultation updated successfully.');
             return $this->redirectToRoute('app_edit_consultation', ['id' => $consultation->getId()]);
         }
@@ -116,6 +141,38 @@ class ConsultationController extends AbstractController
         ]);
     }
 
+    #[Route('/list/admins/consultations', name: 'admin_consultation_list')]
+    public function listConsultationsAdmin(ConsultationRepository $consultationRepository): Response
+    {
+        $consultations = $consultationRepository->findAll();
+
+        return $this->render('admin/consultation_list.html.twig', [
+            'consultations' => $consultations
+        ]);
+    }
+
+    #[Route('list/admin/consultation/{id}', name: 'admin_consultation_details')]
+    public function showConsultationDetails(Consultation $consultation, PrescriptionRepository $prescriptionRepository): Response
+    {
+        $prescriptions = $prescriptionRepository->findBy(['consultation' => $consultation]);
+
+        return $this->render('admin/consultation_details.html.twig', [
+            'consultation' => $consultation,
+            'prescriptions' => $prescriptions
+        ]);
+    }
+
+    #[Route('/history', name: 'app_history')]
+    public function index(ConsultationRepository $consultationRepository): Response
+    {
+
+        $professional = $this->getUser();
+        $consultations = $consultationRepository->findBy(['professionnel' => $professional]);
+
+        return $this->render('consultation/history.html.twig', [
+            'consultations' => $consultations,
+        ]);
+    }
 
 
 

@@ -4,7 +4,7 @@ Author Name: Naimur Rahman
 Website: http://wpthemesgrid.com/
 Description: Mediplus - Doctor HTML Template.
 Version:	1.1
-========================================*/ 
+========================================*/
 
 /*--------------------------------------------------------------
 # Normalize
@@ -737,9 +737,7 @@ a {
 	color: inherit;
 }
 
-a:visited {
-	color: inherit;
-}
+
 
 a:hover, a:focus, a:active {
 	color: inherit;
