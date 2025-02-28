@@ -34,7 +34,7 @@
 
                         <!-- Response Form -->
                         <h5 class="text-primary">Your Response</h5>
-                        {{ form_start(form) }}
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                         <div class="mb-3">
                             {{ form_row(form.reponse, {
                                 'attr': {'class': 'form-control', 'placeholder': 'Write your response here...'}

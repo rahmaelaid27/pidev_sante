@@ -16,21 +16,21 @@ class Reponse
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank(message: "La reponse ne peut pas être vide.")]
     #[Assert\Length(
         min: 5,
         max: 255,
         minMessage: "La reponse doit contenir au moins {{ limit }} caractères.",
-        maxMessage: "Le commentaire ne peut pas dépasser {{ limit }} caractères."
+        maxMessage: "La reponse ne peut pas dépasser {{ limit }} caractères."
     )]
-    private ?string $reponse = null;
+    private ?string $reponse = "";
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_reponse = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false, name: 'id_avis', referencedColumnName: 'ref' , onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(nullable: false, name: 'id_avis', referencedColumnName: 'ref')]
     private ?Avis $avis = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -57,9 +57,9 @@ class Reponse
         return $this->reponse;
     }
 
-    public function setReponse(string $reponse): static
+    public function setReponse(?string $reponse): static
     {
-        $this->reponse = $reponse;
+        $this->reponse = $reponse ?? "";
 
         return $this;
     }

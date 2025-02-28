@@ -7,8 +7,11 @@ use App\Entity\Reponse;
 use App\Form\AvisType;
 use App\Form\ReponseType;
 use App\Repository\AvisRepository;
+use App\Repository\ReponseRepository;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,21 +22,61 @@ final class AvisController extends AbstractController
     #[Route('/list', name: 'app_avis_list')]
     public function list(AvisRepository $avisRepository, Request $request): Response
     {
-        $avisList = $avisRepository->findAll();
+        $user = $this->getUser();
 
-        // Créer un formulaire vide pour la réponse
+        if (in_array('ROLE_PROFESSIONAL', $user->getRoles())) {
+            $avisList = $avisRepository->findBy(['professional' => $user]);
+        } else {
+            $avisList = $avisRepository->findAll();
+        }
+
+        $sortBy = $request->query->get('sort_by', 'date_avis');
+        $order = $request->query->get('order', 'ASC');
+
+        $queryBuilder = $avisRepository->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->andWhere('c.professional = :user')
+            ->setParameter('user', $user);
+
+        if ($sortBy === 'user.nom') {
+            $queryBuilder->orderBy('u.nom', $order);
+        } else {
+            $queryBuilder->orderBy('c.' . $sortBy, $order);
+        }
+
+        $selectedDate = $request->query->get('selected_date');
+
+        if ($selectedDate) {
+            $formattedDate = \DateTime::createFromFormat('m/d/Y', $selectedDate);
+
+            if ($formattedDate) {
+                $startOfDay = clone $formattedDate;
+                $startOfDay->setTime(0, 0, 0);
+
+                $endOfDay = clone $formattedDate;
+                $endOfDay->setTime(23, 59, 59);
+
+                $queryBuilder->andWhere('c.date_avis BETWEEN :startOfDay AND :endOfDay')
+                    ->setParameter('startOfDay', $startOfDay)
+                    ->setParameter('endOfDay', $endOfDay);
+            }
+        }
+
+        $avisList = $queryBuilder->getQuery()->getResult();
+
         $reponse = new Reponse();
         $form = $this->createForm(ReponseType::class, $reponse);
         $form->handleRequest($request);
 
         return $this->render('avis/index.html.twig', [
             'avisList' => $avisList,
-            'form' => $form->createView(), // Passer le formulaire à la vue
+            'form' => $form->createView(),
         ]);
     }
 
+
     #[Route('/new', name: 'app_avis_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MailerService $mailerService): Response
     {
         $user = $this->getUser();
 
@@ -42,16 +85,34 @@ final class AvisController extends AbstractController
         $form = $this->createForm(AvisType::class, $avi);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            dump('Form submitted'); // Debugging
-            dump($form->isValid()); // Debugging
-            dump($form->getErrors(true)); // Debugging
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($avi); // Debugging: Check if the Avis object is populated correctly
+
             $entityManager->persist($avi);
             $entityManager->flush();
+
+            //mailing
+            $note=$avi->getNote();
+            $commentaire=$avi->getCommentaire();
+            $nomPatient=$user->getNom();
+            $professionalEmail=$avi->getProfessional()->getEmail();
+            $professionalNom=$avi->getProfessional()->getNom();
+            $subject = "Nouvelle Avis de " .$nomPatient;
+
+
+
+            $content = "
+                <p>Bonjour <strong>{$professionalNom}</strong>,</p>
+                <p>Un nouveau avis a été soumis par le patient: <strong>{$nomPatient}</strong></p>                             
+                <blockquote style='border-left: 4px solid #007bff; padding-left: 10px; color: #333;'>
+                <p><strong>Note:</strong> {$note}</p> 
+                <p><strong>Note:</strong> {$commentaire}</p>                    
+                </blockquote>
+                <p>Pour toute question, n'hésitez pas à contacter le patient ou votre équipe médicale.</p>
+                <p>Cordialement,</p>
+                <p><em>L'équipe Mediplus</em></p>
+            ";
+
+            $mailerService->sendEmail($professionalEmail, $subject, $content);
 
             return $this->redirectToRoute('app_avis_new', [], Response::HTTP_SEE_OTHER);
         }
@@ -81,8 +142,9 @@ final class AvisController extends AbstractController
             'reponses' => $reponses,
         ]);
     }
+
     #[Route('/delete/{avisId}', name: 'delete_avis')]
-    public function delete(AvisRepository $avisRepository, EntityManagerInterface $entityManager, $avisId): RedirectResponse
+    public function delete(AvisRepository $avisRepository, EntityManagerInterface $entityManager, $avisId): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         // Fetch the review by its ID
         $avis = $avisRepository->find($avisId);
@@ -105,12 +167,22 @@ final class AvisController extends AbstractController
 
     #[Route('/edit/{avisId}', name: 'edit_avis')]
     public function edit(
-        Request $request,
-        AvisRepository $avisRepository,
+        MailerService          $mailerService,
+        Request                $request,
+        AvisRepository         $avisRepository,
         EntityManagerInterface $entityManager,
-        $avisId
-    ): Response {
+                               $avisId
+    ): Response
+    {
+        $user = $this->getUser();
         $avis = $avisRepository->find($avisId);
+
+        $currentNote=$avis->getNote();
+        $currentCommentaire=$avis->getCommentaire();
+        $nomPatient=$user->getNom();
+        $professionalEmail=$avis->getProfessional()->getEmail();
+        $professionalNom=$avis->getProfessional()->getNom();
+        $subject = "Mise a jour Avis de " .$nomPatient;
 
         // Vérifier si l'avis existe et appartient à l'utilisateur connecté
         if (!$avis || $this->getUser() !== $avis->getUser()) {
@@ -124,6 +196,31 @@ final class AvisController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $newNote=$avis->getNote();
+            $newCommentaire=$avis->getCommentaire();
+
+            $content = "
+                <p>Bonjour <strong>{$professionalNom}</strong>,</p>
+                <p>Le patient <strong>{$nomPatient}</strong> a mis à jour son avis.</p>                             
+                <p><strong>Ancien avis :</strong></p>
+                <blockquote style='border-left: 4px solid #dc3545; padding-left: 10px; color: #333;'>
+                    <p><strong>Note:</strong> {$currentNote}</p> 
+                    <p><strong>Commentaire:</strong> {$currentCommentaire}</p>                    
+                </blockquote>
+                <p><strong>Nouveau avis :</strong></p>
+                <blockquote style='border-left: 4px solid #28a745; padding-left: 10px; color: #333;'>
+                    <p><strong>Note:</strong> {$newNote}</p> 
+                    <p><strong>Commentaire:</strong> {$newCommentaire}</p>                    
+                </blockquote>
+                <p>Pour toute question, n'hésitez pas à contacter le patient ou votre équipe médicale.</p>
+                <p>Cordialement,</p>
+                <p><em>L'équipe Mediplus</em></p>
+            ";
+
+            $mailerService->sendEmail($professionalEmail, $subject, $content);
+
+
             $this->addFlash('success', 'Avis mis à jour avec succès.');
             return $this->redirectToRoute('app_avis_list');
         }
@@ -134,42 +231,42 @@ final class AvisController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/avis', name: 'admin_avis_list')]
+    public function listAvisAdmin(AvisRepository $avisRepository): Response
+    {
+        $avis = $avisRepository->findAll(); // Récupère tous les avis
+        return $this->render('/avis/list.html.twig', [
+            'avisList' => $avis,
+        ]);
+    }
+//    #[Route('/admin/avis/{id}', name: 'admin_avis_details')]
+//    public function detailsAvisAdmin(AvisRepository $avisRepository, $id): Response {
+//    $avis = $avisRepository->find($id);
+//
+//    if (!$avis) {
+//        throw $this->createNotFoundException("Avis non trouvé.");
+//    }
+//
+//    return $this->render('/avis/backdetails.html.twig', [
+//        'avis' => $avis,
+//        'reponses' => $avis->getReponses(),
+//    ]);
+//}
+
+    #[Route('/admin/avis/{id}', name: 'admin_avis_details')]
+    public function showAvisDetails(Avis $avis, ReponseRepository $reponseRepository): Response
+    {
+        $reponses = $reponseRepository->findBy(['avis' => $avis]);
+
+        return $this->render('avis/backdetails.html.twig', [
+            'avis' => $avis,
+            'reponses' => $reponses
+        ]);
+    }
+
+//    statistiques
 
 
-//    #[Route('/{id}', name: 'app_avis_show', methods: ['GET'])]
-//    public function show(Avis $avi): Response
-//    {
-//        return $this->render('avis/show.html.twig', [
-//            'avi' => $avi,
-//        ]);
-//    }
-//
-//    #[Route('/{id}/edit', name: 'app_avis_edit', methods: ['GET', 'POST'])]
-//    public function edit(Request $request, Avis $avi, EntityManagerInterface $entityManager): Response
-//    {
-//        $form = $this->createForm(AvisType::class, $avi);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('app_avis_index', [], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('avis/edit.html.twig', [
-//            'avi' => $avi,
-//            'form' => $form,
-//        ]);
-//    }
-//
-//    #[Route('/{id}', name: 'app_avis_delete', methods: ['POST'])]
-//    public function delete(Request $request, Avis $avi, EntityManagerInterface $entityManager): Response
-//    {
-//        if ($this->isCsrfTokenValid('delete'.$avi->getRef(), $request->getPayload()->getString('_token'))) {
-//            $entityManager->remove($avi);
-//            $entityManager->flush();
-//        }
-//
-//        return $this->redirectToRoute('app_avis_index', [], Response::HTTP_SEE_OTHER);
-//    }
+
+
 }

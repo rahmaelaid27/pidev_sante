@@ -116,7 +116,6 @@ final class ReponseController extends AbstractController
     #[Route('/avis/{avisId}/respond', name: 'respond_avis', methods: ['GET', 'POST'])]
     public function respondToAvis(Request $request, int $avisId, EntityManagerInterface $entityManager): Response
     {
-        // Fetch the avis based on avisId
         $avis = $entityManager->getRepository(Avis::class)->find($avisId);
 
         if (!$avis) {
@@ -125,11 +124,9 @@ final class ReponseController extends AbstractController
 
         $professional = $this->getUser();
 
-        // Create a new response entity and form
         $reponse = new Reponse();
         $form = $this->createForm(ReponseType::class, $reponse);
 
-        // Handle form submission
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $reponse->setAvis($avis);

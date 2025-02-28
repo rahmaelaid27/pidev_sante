@@ -24,7 +24,7 @@ class Avis
     )]
     private ?int $note = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank(message: "Le commentaire ne peut pas être vide.")]
     #[Assert\Length(
         min: 5,
@@ -32,7 +32,7 @@ class Avis
         minMessage: "Le commentaire doit contenir au moins {{ limit }} caractères.",
         maxMessage: "Le commentaire ne peut pas dépasser {{ limit }} caractères."
     )]
-    private ?string $commentaire = null;
+    private ?string $commentaire = "";
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Assert\NotBlank(message: "La date de l'avis est obligatoire.")]
@@ -41,7 +41,7 @@ class Avis
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false, name: 'id_user', referencedColumnName: 'ref')]
-    #[Assert\NotNull(message: "Une consultation doit être associée à l'avis.")]
+    #[Assert\NotNull(message: "Un utlisateur doit être associée à l'avis.")]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -80,9 +80,9 @@ class Avis
         return $this->commentaire;
     }
 
-    public function setCommentaire(string $commentaire): static
+    public function setCommentaire(?string $commentaire): static
     {
-        $this->commentaire = $commentaire;
+        $this->commentaire = $commentaire ?? "";
         return $this;
     }
 
