@@ -15,7 +15,7 @@
             {% for consultation in consultations %}
                 <div class="card shadow-lg mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h5>Consultation Date: {{ consultation.dateConsultation|date('d/m/Y H:i') }}</h5>
+                        <h5 class="text-white">Consultation Date: {{ consultation.dateConsultation|date('d/m/Y H:i') }}</h5>
                     </div>
                     <div class="card-body">
                         <p><strong>Patient:</strong> {{ consultation.user.nom }}</p>
@@ -79,7 +79,7 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
-                            <div class="alert alert-info text-center mt-3" role="alert">
+                            <div class="alert alert-danger text-center mt-3" role="alert">
                                 No prescriptions available for this consultation.
                             </div>
                         {% endif %}

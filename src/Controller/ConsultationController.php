@@ -110,7 +110,7 @@ class ConsultationController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Consultation deleted successfully.');
-        return $this->redirectToRoute('app_dashboard');
+        return $this->redirectToRoute('app_professional_consultations');
 
     }
 

@@ -85,8 +85,9 @@ class PresecriptionController extends AbstractController
     #[Route('/presecriptions', name: 'presecriptions_list')]
     public function list(ConsultationRepository $consultationRepository): \Symfony\Component\HttpFoundation\Response
     {
-        // Fetch all consultations with their prescriptions
-        $consultations = $consultationRepository->findAll();
+
+        $user=$this->getUser();
+        $consultations = $consultationRepository->findBy(['professionnel'=>$user]);
 
         return $this->render('presecription/list.html.twig', [
             'consultations' => $consultations,
