@@ -59,7 +59,7 @@ final class ReponseController extends AbstractController
         }
         $avis = $reponse->getAvis();
 
-        if ($this->getUser() !== $reponse->getAvis()->getUser()) {
+        if ($this->getUser() !== $reponse->getMadeBy()) {
 
             throw $this->createAccessDeniedException('You cannot edit this response.');
         }
