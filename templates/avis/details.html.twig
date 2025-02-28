@@ -46,7 +46,7 @@
                                 <div class="list-group">
                                     {% for reponse in reponses %}
                                         <div class="list-group-item">
-                                            <h6 class="font-weight-bold">{{ reponse.avis.user.nom }}</h6>
+                                            <h6 class="font-weight-bold">{{ reponse.madeBy.nom }}</h6>
                                             <p>{{ reponse.reponse }}</p>
                                             <small class="text-muted">Responded on: {{ reponse.dateReponse|date('Y-m-d') }}</small>
 

@@ -34,6 +34,7 @@ final class ReponseController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $reponse->setAvis($avis);
+            $reponse->setMadeBy($professional);
             $reponse->setProfessional($professional);
             $reponse->setDateReponse(new \DateTime());
             $entityManager->persist($reponse);

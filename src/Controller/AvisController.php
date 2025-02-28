@@ -24,7 +24,7 @@ final class AvisController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (in_array('ROLE_PROFESSIONAL', $user->getRoles())) {
+        if (in_array("ROLE_PROFESSIONAL", $user->getRoles())) {
             $avisList = $avisRepository->findBy(['professional' => $user]);
         } else {
             $avisList = $avisRepository->findAll();
@@ -34,9 +34,14 @@ final class AvisController extends AbstractController
         $order = $request->query->get('order', 'ASC');
 
         $queryBuilder = $avisRepository->createQueryBuilder('c')
-            ->leftJoin('c.user', 'u')
-            ->andWhere('c.professional = :user')
-            ->setParameter('user', $user);
+            ->leftJoin('c.user', 'u');
+
+        if (in_array("ROLE_PROFESSIONAL", $user->getRoles())) {
+            $queryBuilder->andWhere('c.professional = :user')
+                ->setParameter('user', $user);
+        } else {
+            $queryBuilder->andWhere('c.professional IS NOT NULL');
+        }
 
         if ($sortBy === 'user.nom') {
             $queryBuilder->orderBy('u.nom', $order);
@@ -45,7 +50,6 @@ final class AvisController extends AbstractController
         }
 
         $selectedDate = $request->query->get('selected_date');
-
         if ($selectedDate) {
             $formattedDate = \DateTime::createFromFormat('m/d/Y', $selectedDate);
 
@@ -73,6 +77,7 @@ final class AvisController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
 
     #[Route('/new', name: 'app_avis_new', methods: ['GET', 'POST'])]

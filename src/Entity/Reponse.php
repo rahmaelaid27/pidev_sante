@@ -37,9 +37,23 @@ class Reponse
     #[ORM\JoinColumn(nullable: false, name: 'professional_id', referencedColumnName: 'ref')]
     private ?User $professional = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true, name: 'madeBy_id', referencedColumnName: 'ref')]
+    private ?User $madeBy = null;
+
     public function getProfessional(): ?User
     {
         return $this->professional;
+    }
+
+    public function getMadeBy(): ?User
+    {
+        return $this->madeBy;
+    }
+
+    public function setMadeBy(?User $madeBy): void
+    {
+        $this->madeBy = $madeBy;
     }
 
     public function setProfessional(?User $professional): self
