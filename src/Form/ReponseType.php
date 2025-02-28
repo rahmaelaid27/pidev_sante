@@ -16,9 +16,10 @@ class ReponseType extends AbstractType
         $builder
             ->add('reponse', TextType::class, [
                 'label' => 'Your Response',
-                'attr' => ['placeholder' => 'Type your response here...']
-            ])
-            ->add('submit', SubmitType::class, ['label' => 'Submit Response']);
+                'attr' => ['placeholder' => 'Type your response here...'],
+                'required' => false,
+                'trim' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -25,7 +25,7 @@ class Avis
     private ?int $note = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Assert\NotBlank(message: "Le commentaire ne peut pas être vide.")]
+//    #[Assert\NotBlank(message: "Le commentaire ne peut pas être vide.")]
     #[Assert\Length(
         min: 5,
         max: 255,

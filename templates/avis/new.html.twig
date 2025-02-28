@@ -6,8 +6,16 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-5 mb-5">
-        <h2 class="mb-4">Formulaire d'Avis</h2>
+    <div class="container mt-5 mb-5"
+         style=
+         "display: flex;
+         justify-content: start;
+         flex-direction: column;
+         border: 1px solid #1A76D1;
+         border-radius: 5px;
+         padding: 30px;
+    ">
+        <h2 class="mb-4 text-center">Formulaire d'Avis</h2>
 
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
@@ -17,23 +25,28 @@
         {{ form_errors(form) }}
 
         <div class="form-group mb-3">
-            {{ form_label(form.note, 'Note') }} <span style="color: red">*</span>
+            <label style="color: #040504">{{ form_label(form.note) | raw }}</label> <span style="color: red">*</span>
             {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.note, {'attr': {'class': 'form-error'}}) }} {# Display field-specific errors #}
-
+            <div class="text-danger">
+                {{ form_errors(form.note, {'attr': {'class': 'form-error'}}) }}
+            </div>
         </div>
 
+
         <div class="form-group mb-3">
-            {{ form_label(form.commentaire, 'Commentaire') }} <span style="color: red">*</span>
+            <label style="color: #040504">{{ form_label(form.commentaire, 'Commentaire') }}</label> <span style="color: red">*</span>
             {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'rows': 4}}) }}
-            {{ form_errors(form.commentaire) }} {# Display field-specific errors #}
-            <div class="invalid-feedback">Le commentaire ne peut pas être vide.</div>
+            <div class="text-danger">
+                {{ form_errors(form.commentaire) }}
+            </div>
         </div>
 
         <div class="form-group mb-3">
-            {{ form_label(form.date_avis, 'Date de l\'avis') }} <span style="color: red">*</span>
+            <label style="color: #040504">{{ form_label(form.date_avis, 'Date de l\'avis') }}</label> <span style="color: red">*</span>
             {{ form_widget(form.date_avis, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.date_avis) }} {# Display field-specific errors #}
+            <div class="text-danger">
+            {{ form_errors(form.date_avis) }}
+            </div>
         </div>
 
         <div class="form-group mb-3">
@@ -42,14 +55,16 @@
         </div>
 
         <div class="form-group mb-3">
-            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary ml-5 w-20'}}) }}
         </div>
+
+        <a href="{{ path('app_avis_list') }}" class="btn btn-info btn-sm mx-2">
+            liste des Avis
+        </a>
 
         {{ form_end(form) }}
 
-        <a href="{{ path('app_avis_list') }}" class="btn btn-info btn-sm mx-2" data-toggle="tooltip" title="View Details">
-            liste des Avis
-        </a>
+
     </div>
 
     {% if success %}

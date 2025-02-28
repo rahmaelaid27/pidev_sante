@@ -5,45 +5,53 @@
 {% block body %}
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 mb-5">
                 <div class="card shadow-lg">
                     <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0">Respond to Feedback</h3>
+                        <h3 class="mb-0 text-white">Respond to {{ avis.user.nom }}'s Feedback :</h3>
                     </div>
                     <div class="card-body">
                         <!-- Display Avis details -->
                         <div class="mb-4">
-                            <h5 class="text-primary">Feedback Details</h5>
-                            <div class="mb-3">
-                                <strong>Utilisateur:</strong> <span class="text-muted">{{ avis.user.nom }}</span>
+                            <h5 class="text-primary mb-3">Feedback Details : </h5>
+                            <div class="mb-2">
+                                <strong class="text-dark">Patient:</strong> <span class="text-muted">{{ avis.user.nom }}</span>
                             </div>
-                            <div class="mb-3">
-                                <strong>Professionnel:</strong> <span class="text-muted">{{ avis.professional.nom }}</span>
+                            <div class="mb-2">
+                                <strong class="text-dark">Professionnel:</strong> <span class="text-muted">{{ avis.professional.nom }}</span>
                             </div>
-                            <div class="mb-3">
-                                <strong>Commentaire:</strong>
-                                <p class="text-muted">{{ avis.commentaire }}</p>
+                            <div class="mb-2">
+                                <strong class="text-dark">Commentaire:</strong>
+                                <span class="text-muted">{{ avis.commentaire }}</span>
                             </div>
-                            <div class="mb-3">
-                                <strong>Note:</strong> <span class="text-muted">{{ avis.note }}</span>
+                            <div class="mb-2">
+                                <strong class="text-dark">Note:</strong> <span class="text-muted">{{ avis.note }}</span>
                             </div>
-                            <div class="mb-3">
-                                <strong>Date:</strong> <span class="text-muted">{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</span>
+                            <div class="mb-2">
+                                <strong class="text-dark">Date:</strong> <span class="text-muted">{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</span>
                             </div>
                         </div>
 
-                        <!-- Response Form -->
-                        <h5 class="text-primary">Your Response</h5>
-                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        <h5 class="text-primary mb-2">Your Response</h5>
+
                         <div class="mb-3">
-                            {{ form_row(form.reponse, {
+                            {{ form_widget(form.reponse, {
                                 'attr': {'class': 'form-control', 'placeholder': 'Write your response here...'}
                             }) }}
+                            {% if form.reponse.vars.errors|length > 0 %}
+                                <div class="text-danger">
+                                    {{ form.reponse.vars.errors[0].message }}
+                                </div>
+                            {% endif %}
                         </div>
+
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                         <div class="d-flex justify-content-between">
-                            <a href="{{ path('app_avis_list') }}" class="btn btn-secondary">Back to Reviews</a>
-                            <!-- Only one submit button -->
                             <button type="submit" class="btn btn-success">Submit Response</button>
+
+                            <a href="{{ path('app_avis_list') }}" class="btn btn-secondary">Back to Reviews</a>
+
                         </div>
                         {{ form_end(form) }}
                     </div>
