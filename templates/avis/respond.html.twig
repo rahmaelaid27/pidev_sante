@@ -34,19 +34,19 @@
 
                         <h5 class="text-primary mb-2">Your Response</h5>
 
+
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
                         <div class="mb-3">
                             {{ form_widget(form.reponse, {
                                 'attr': {'class': 'form-control', 'placeholder': 'Write your response here...'}
                             }) }}
-                            {% if form.reponse.vars.errors|length > 0 %}
-                                <div class="text-danger">
-                                    {{ form.reponse.vars.errors[0].message }}
-                                </div>
-                            {% endif %}
+                            <div class="text-danger">
+                                {{ form_errors(form.reponse) }}
+                            </div>
                         </div>
 
-
-                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-success">Submit Response</button>
 
