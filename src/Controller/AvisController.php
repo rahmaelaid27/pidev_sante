@@ -110,7 +110,7 @@ final class AvisController extends AbstractController
                 <p>Un nouveau avis a été soumis par le patient: <strong>{$nomPatient}</strong></p>                             
                 <blockquote style='border-left: 4px solid #007bff; padding-left: 10px; color: #333;'>
                 <p><strong>Note:</strong> {$note}</p> 
-                <p><strong>Note:</strong> {$commentaire}</p>                    
+                <p><strong>Commentaire:</strong> {$commentaire}</p>                    
                 </blockquote>
                 <p>Pour toute question, n'hésitez pas à contacter le patient ou votre équipe médicale.</p>
                 <p>Cordialement,</p>
