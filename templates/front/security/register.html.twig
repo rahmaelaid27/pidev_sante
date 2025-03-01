@@ -63,6 +63,11 @@
   
 
             {{ form_end(registrationForm) }}
+            <div class="text-center mb-3">
+    <a href="{{ path('connect_google_start') }}" class="btn btn-bleu">
+        <i class="fab fa-google"></i> S'inscrire avec Google
+    </a>
+</div>
 
             <div class="text-center mt-3">
                 <a href="{{ path('front_login') }}">Déjà un compte ? Connectez-vous</a>

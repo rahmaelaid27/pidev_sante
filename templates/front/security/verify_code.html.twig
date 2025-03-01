@@ -1,0 +1,34 @@
+{% extends 'front/base_front.html.twig' %}
+
+{% block title %}Vérification du code{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Vérification du code</h2>
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+
+            <form method="POST" action="{{ path('front_verify_code') }}">
+                <input type="hidden" name="email" value="{{ app.request.query.get('email') }}">
+
+                <div class="mb-3">
+                    <label for="code" class="form-label">Entrez le code reçu :</label>
+                    <input type="text" id="code" name="code" class="form-control" required>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Vérifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
