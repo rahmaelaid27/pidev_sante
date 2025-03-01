@@ -1,0 +1,47 @@
+{# templates/consultation/add_prescription.html.twig #}
+{% extends 'front.html.twig' %}
+
+{% block title %}Add Prescription{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card shadow-lg rounded-4">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h4>Add Prescription for Consultation</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {{ form_start(form) }}
+
+                            <div class="mb-3">
+                                <label for="{{ form.description.vars.id }}" class="form-label">Prescription Description</label>
+
+                                {{ form_widget(form.description, {
+                                    'attr': {
+                                        'class': 'form-control' ~ (form.description.vars.errors|length > 0 ? ' is-invalid' : ''),
+                                        'placeholder': 'Enter description of the prescription'
+                                    }
+                                }) }}
+
+                                {# Display validation error if any #}
+                                {% if form.description.vars.errors|length > 0 %}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.description) }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">Add Prescription</button>
+                            </div>
+                            {{ form_end(form) }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

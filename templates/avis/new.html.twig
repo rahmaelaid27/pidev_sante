@@ -1,0 +1,90 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}New Avis{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('css/avis.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <h2 class="mb-4">Formulaire d'Avis</h2>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        {{ form_row(form._token) }}
+
+        {# Display global form errors #}
+        {{ form_errors(form) }}
+
+        <div class="form-group mb-3">
+            {{ form_label(form.note, 'Note') }} <span style="color: red">*</span>
+            {{ form_widget(form.note, {'attr': {'class': 'form-control', 'min': 1, 'max': 5}}) }}
+            {{ form_errors(form.note, {'attr': {'class': 'form-error'}}) }} {# Display field-specific errors #}
+
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.commentaire, 'Commentaire') }} <span style="color: red">*</span>
+            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+            {{ form_errors(form.commentaire) }} {# Display field-specific errors #}
+            <div class="invalid-feedback">Le commentaire ne peut pas être vide.</div>
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.date_avis, 'Date de l\'avis') }} <span style="color: red">*</span>
+            {{ form_widget(form.date_avis, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.date_avis) }} {# Display field-specific errors #}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_widget(form.professional, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.professional) }} {# Display field-specific errors #}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+
+        {{ form_end(form) }}
+
+        <a href="{{ path('app_avis_list') }}" class="btn btn-info btn-sm mx-2" data-toggle="tooltip" title="View Details">
+            liste des Avis
+        </a>
+    </div>
+
+    {% if success %}
+        <div class="alert alert-success">Form submitted successfully!</div>
+    {% endif %}
+
+
+    <script>
+        // Validation JS
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let isValid = true;
+            const note = document.querySelector('[name="form[note]"]');
+            const commentaire = document.querySelector('[name="form[commentaire]"]');
+            const form = event.target;
+
+            // Check for note (should be between 1 and 5)
+            if (note.value < 1 || note.value > 5) {
+                isValid = false;
+                note.classList.add('is-invalid');
+            } else {
+                note.classList.remove('is-invalid');
+            }
+
+            // Check for commentaire (should not be empty)
+            if (commentaire.value.trim() === "") {
+                isValid = false;
+                commentaire.classList.add('is-invalid');
+            } else {
+                commentaire.classList.remove('is-invalid');
+            }
+
+            // Prevent form submission if invalid
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}

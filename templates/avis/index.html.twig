@@ -1,0 +1,89 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+    <div class="page-inner">
+        {% block Table %}
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="card-title mb-0">Liste des Avis</h4>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="avis-table" class="table table-striped table-hover table-bordered">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Utilisateur</th>
+                                        <th>Professionnel</th>
+                                        <th>Note</th>
+                                        <th>Commentaire</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for avis in avisList %}
+                                        <tr>
+                                            <td>{{ avis.user.nom }}</td>
+                                            <td>{{ avis.professional.nom }}</td>
+                                            <td>
+                                                <div class="badge {% if avis.note >= 4 %}badge-success{% elseif avis.note >= 2 %}badge-warning{% else %}badge-danger{% endif %}">
+                                                    {{ avis.note }}
+                                                </div>
+                                            </td>
+                                            <td>{{ avis.commentaire }}</td>
+                                            <td>{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</td>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <!-- View Details Button -->
+                                                    <a href="{{ path('avis_details', {'avisId': avis.ref }) }}" class="btn btn-info btn-sm mx-2" data-toggle="tooltip" title="View Details">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+
+                                                    <!-- Respond Button -->
+                                                    <a href="{{ path('respond_avis', {'avisId': avis.ref }) }}" class="btn btn-primary btn-sm mx-2" data-toggle="tooltip" title="Respond">
+                                                        <i class="fa fa-reply"></i>
+                                                    </a>
+
+                                                    <!-- Delete Button (only for the logged-in user who owns the avis) -->
+{#                                                    {% if app.user == avis.user %}#}
+{#                                                        <form method="post" action="{{ path('delete_avis', {'avisId': avis.ref }) }}" style="display:inline;">#}
+{#                                                            <button type="submit" class="btn btn-danger btn-sm mx-2" onclick="return confirm('Are you sure you want to delete this review?')" data-toggle="tooltip" title="Delete">#}
+{#                                                                <i class="fa fa-trash"></i>#}
+{#                                                            </button>#}
+{#                                                        </form>#}
+{#                                                    {% endif %}#}
+
+                                                    {% if app.user == avis.user %}
+                                                        <a href="{{ path('edit_avis', {'avisId': avis.ref }) }}" class="btn btn-success btn-sm mx-2" data-toggle="tooltip" title="Modifier">
+                                                            Update
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center">Aucun avis disponible</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+
+    <!-- Add tooltips for buttons -->
+    <script>
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+{% endblock %}
