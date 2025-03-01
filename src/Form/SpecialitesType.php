@@ -46,7 +46,7 @@ class SpecialitesType extends AbstractType
                 'constraints'=>[
                     new NotBlank(),
                     new Assert\GreaterThan([
-                        'value'=>40,
+                        'value'=>39,
                         'message'=>'Veuillez entrer un nombre valide min 40'
                     ])
                 ]
