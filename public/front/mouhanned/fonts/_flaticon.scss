@@ -1,0 +1,93 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 12/06/2017 12:37
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-arrows:before { content: "\f100"; }
+.flaticon-medical-3:before { content: "\f101"; }
+.flaticon-scalpel:before { content: "\f102"; }
+.flaticon-lungs:before { content: "\f103"; }
+.flaticon-envelope:before { content: "\f104"; }
+.flaticon-location-marker:before { content: "\f105"; }
+.flaticon-frown-face:before { content: "\f106"; }
+.flaticon-users:before { content: "\f107"; }
+.flaticon-people:before { content: "\f108"; }
+.flaticon-medical-2:before { content: "\f109"; }
+.flaticon-thumb-up:before { content: "\f10a"; }
+.flaticon-brain:before { content: "\f10b"; }
+.flaticon-medical-1:before { content: "\f10c"; }
+.flaticon-stomach:before { content: "\f10d"; }
+.flaticon-medical:before { content: "\f10e"; }
+.flaticon-briefcase:before { content: "\f10f"; }
+.flaticon-doctor-stethoscope:before { content: "\f110"; }
+.flaticon-productivity:before { content: "\f111"; }
+.flaticon-eye:before { content: "\f112"; }
+.flaticon-tooth:before { content: "\f113"; }
+.flaticon-success:before { content: "\f114"; }
+.flaticon-time:before { content: "\f115"; }
+.flaticon-phone-call:before { content: "\f116"; }
+.flaticon-user:before { content: "\f117"; }
+.flaticon-search:before { content: "\f118"; }
+.flaticon-technology:before { content: "\f119"; }
+.flaticon-note:before { content: "\f11a"; }
+    
+    $font-Flaticon-arrows: "\f100";
+    $font-Flaticon-medical-3: "\f101";
+    $font-Flaticon-scalpel: "\f102";
+    $font-Flaticon-lungs: "\f103";
+    $font-Flaticon-envelope: "\f104";
+    $font-Flaticon-location-marker: "\f105";
+    $font-Flaticon-frown-face: "\f106";
+    $font-Flaticon-users: "\f107";
+    $font-Flaticon-people: "\f108";
+    $font-Flaticon-medical-2: "\f109";
+    $font-Flaticon-thumb-up: "\f10a";
+    $font-Flaticon-brain: "\f10b";
+    $font-Flaticon-medical-1: "\f10c";
+    $font-Flaticon-stomach: "\f10d";
+    $font-Flaticon-medical: "\f10e";
+    $font-Flaticon-briefcase: "\f10f";
+    $font-Flaticon-doctor-stethoscope: "\f110";
+    $font-Flaticon-productivity: "\f111";
+    $font-Flaticon-eye: "\f112";
+    $font-Flaticon-tooth: "\f113";
+    $font-Flaticon-success: "\f114";
+    $font-Flaticon-time: "\f115";
+    $font-Flaticon-phone-call: "\f116";
+    $font-Flaticon-user: "\f117";
+    $font-Flaticon-search: "\f118";
+    $font-Flaticon-technology: "\f119";
+    $font-Flaticon-note: "\f11a";

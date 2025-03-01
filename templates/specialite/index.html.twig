@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <a href="{{ path('specialite.create') }}">Add specialite</a>
+    <table style="width:100% ; border: 1px">
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Duree consultation</th>
+            <th>Tarif</th>
+            <th>Status</th>
+            <th>Bloc</th>
+            <th>Action</th>
+        </tr>
+        {% for spec in specialites %}
+            <tr>
+                <th>{{ spec.id }}</th>
+                <th>{{ spec.nom }}</th>
+                <th>{{ spec.description }}</th>
+                <th>{{ spec.dureeConsultation }}</th>
+                <th>{{ spec.tarif }}</th>
+                <th>{{ spec.statut }}</th>
+                <th>{{ spec.idBloc.nom }}</th>
+                <th>
+                    <a href="{{ path('specialite.edit',{id: spec.id}) }}">Edit</a>
+                    <a href="{{ path('specialite.delete' , {id: spec.id}) }}">Delete</a>
+                </th>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

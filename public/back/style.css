@@ -277,6 +277,26 @@ body {
 	object-fit: cover;
 	border-radius: 50%;
 }
+/*
+#content nav .logo-container {
+	width: 36px;
+	height: 36px;
+	object-fit: cover;
+
+	border-radius: 50%;
+}*/
+
+#content nav.logo-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Positionne le logo à droite */
+}
+
+#content nav.logo-container img {
+    height: 40px; /* Ajustez la taille selon votre besoin */
+    width: auto;
+}
+
 #content nav .switch-mode {
 	display: block;
 	min-width: 50px;
