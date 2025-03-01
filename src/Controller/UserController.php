@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
-{
+{   
     #[Route('/ajouter-user', name: 'ajouter_user')]
     public function ajouterUtilisateur(Request $request, EntityManagerInterface $entityManager): Response
     {

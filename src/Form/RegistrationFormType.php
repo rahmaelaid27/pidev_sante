@@ -53,7 +53,7 @@ class RegistrationFormType extends AbstractType
                 'choices' => [
                     'Patient' => 'patient',
                     'Professionnel' => 'professionnel',
-                    'Admin ' => 'Admin',
+                    'Admin' => 'admin',
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez sélectionner un rôle']),

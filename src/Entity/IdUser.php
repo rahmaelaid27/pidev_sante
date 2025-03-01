@@ -29,8 +29,14 @@ class IdUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: "string", length: 50)]
     #[Assert\NotBlank(message: "Le rôle est obligatoire.")]
-    #[Assert\Choice(choices: ["patient", "professionnel","admin"], message: "Le rôle doit être 'patient' ou 'professionnel'ou 'admin'.")]
+    #[Assert\Choice(choices: ["patient", "professionnel", "admin"], message: "Le rôle doit être 'patient', 'professionnel' ou 'admin'.")]
     private ?string $role = null;
+
+    #[ORM\Column(type: "string", nullable: true)]
+    private ?string $resetToken = null;
+
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $resetTokenExpiresAt = null;
 
     public function getId(): ?int
     {
@@ -81,9 +87,16 @@ class IdUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Retourne un tableau de rôles au format Symfony (ROLE_*).
+     */
     public function getRoles(): array
     {
-        return [$this->role];
+        return match ($this->role) {
+            'admin' => ['ROLE_ADMIN'],
+            'professionnel' => ['ROLE_PROFESSIONNEL'],
+            default => ['ROLE_USER'], // Par défaut, un patient a ROLE_USER
+        };
     }
 
     public function getUserIdentifier(): string
@@ -93,5 +106,28 @@ class IdUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+        // Si tu stockes des données sensibles temporairement, efface-les ici
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+        return $this;
+    }
+
+    public function getResetTokenExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->resetTokenExpiresAt;
+    }
+
+    public function setResetTokenExpiresAt(?\DateTimeInterface $resetTokenExpiresAt): self
+    {
+        $this->resetTokenExpiresAt = $resetTokenExpiresAt;
+        return $this;
     }
 }
