@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons (Icônes) -->
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Bootstrap (Facultatif pour améliorer le design) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('back/style.css') }}">
+
+    <title>{% block title %}AdminHub{% endblock %}</title>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="{{ path('ajouter_user') }}" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">MediPlus</span>
+        </a>
+        <ul class="side-menu top">
+            <li class="{% if app.request.attributes.get('_route') == '.....' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+
+                        <li class="{% if app.request.attributes.get('_route') == 'gestion_review' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bx-comment'></i>
+                    <span class="text">Gestion Review</span>
+                </a>
+            </li>
+            <li class="{% if app.request.attributes.get('_route') == 'gestion_consultation' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bx-calendar'></i>
+                    <span class="text">Gestion Consultation</span>
+                </a>
+            </li>
+            <li class="{% if app.request.attributes.get('_route') == 'gestion_rdv' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bx-calendar-check'></i>
+                    <span class="text">Gestion Rendez-vous</span>
+                </a>
+            </li>
+            <li class="{% if app.request.attributes.get('_route') == 'gestion_specialites' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bx-clinic'></i>
+                    <span class="text">Gestion Spécialités</span>
+                </a>
+            </li>
+            <li class="{% if app.request.attributes.get('_route') == 'ajouter_user' %}active{% endif %}">
+                <a href="{{ path('ajouter_user') }}">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Gestion Utilisateurs</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+
+            <li>
+                <a href="{{ path('logout') }}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- FIN SIDEBAR -->
+
+    <!-- CONTENU -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu' id="toggle-menu"></i>
+            <a href="{{ path('ajouter_user') }}" class="nav-link">Dashboard</a>
+        </nav>
+        <!-- FIN NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <!-- FIN MAIN -->
+    </section>
+    <!-- FIN CONTENU -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ asset('back/script.js') }}"></script>
+
+    <script>
+        // Gestion du menu latéral
+        document.getElementById("toggle-menu").addEventListener("click", function () {
+            document.getElementById("sidebar").classList.toggle("active");
+        });
+    </script>
+
+</body>
+</html>
