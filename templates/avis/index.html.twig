@@ -26,8 +26,8 @@
                                     <tbody>
                                     {% for avis in avisList %}
                                         <tr>
-                                            <td>{{ avis.user.nom }}</td>
-                                            <td>{{ avis.professional.nom }}</td>
+                                            <td>{{ avis.getUser().nameUser }}</td>
+                                            <td>{{ avis.professional.nameUser }}</td>
                                             <td>
                                                 <div class="badge {% if avis.note >= 4 %}badge-success{% elseif avis.note >= 2 %}badge-warning{% else %}badge-danger{% endif %}">
                                                     {{ avis.note }}

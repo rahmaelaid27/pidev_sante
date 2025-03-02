@@ -33,16 +33,16 @@ class Reponse
     #[ORM\JoinColumn(nullable: false, name: 'id_avis', referencedColumnName: 'ref' , onDelete: 'CASCADE')]
     private ?Avis $avis = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false, name: 'professional_id', referencedColumnName: 'ref')]
-    private ?User $professional = null;
+    #[ORM\ManyToOne(targetEntity: IdUser::class)]
+    #[ORM\JoinColumn(nullable: false, name: 'professional_id', referencedColumnName: 'id')]
+    private ?IdUser $professional = null;
 
-    public function getProfessional(): ?User
+    public function getProfessional(): ?IdUser
     {
         return $this->professional;
     }
 
-    public function setProfessional(?User $professional): self
+    public function setProfessional(?IdUser $professional): self
     {
         $this->professional = $professional;
         return $this;

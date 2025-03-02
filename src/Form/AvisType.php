@@ -2,7 +2,7 @@
 namespace App\Form;
 
 use App\Entity\Avis;
-use App\Entity\User;
+use App\Entity\IdUser;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -27,13 +27,13 @@ class AvisType extends AbstractType
         // Ajouter le champ 'professional' uniquement lors de la création
         if (!$options['is_edit']) {
             $builder->add('professional', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'nom',
+                'class' => IdUser::class,
+                'choice_label' => 'nameUser',
                 'label' => 'Choisir un professionnel',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->where("u.roles LIKE :role")
-                        ->setParameter('role', '%ROLE_PRO%');
+                        ->where("u.role LIKE :role")
+                        ->setParameter('role', 'professionnel');
                 },
                 'placeholder' => 'Sélectionner un professionnel',
             ]);

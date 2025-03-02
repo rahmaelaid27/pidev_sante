@@ -40,20 +40,20 @@ class Avis
     private ?\DateTimeInterface $date_avis = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false, name: 'id_user', referencedColumnName: 'ref')]
+    #[ORM\JoinColumn(nullable: false, name: 'id_user', referencedColumnName: 'id')]
     #[Assert\NotNull(message: "Une consultation doit être associée à l'avis.")]
-    private ?User $user = null;
+    private ?IdUser $user = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false, name: 'professional_id', referencedColumnName: 'ref')]
-    private ?User $professional = null;
+    #[ORM\ManyToOne(targetEntity: IdUser::class)]
+    #[ORM\JoinColumn(nullable: false, name: 'professional_id', referencedColumnName: 'id')]
+    private ?IdUser $professional = null;
 
-    public function getProfessional(): ?User
+    public function getProfessional(): ?IdUser
     {
         return $this->professional;
     }
 
-    public function setProfessional(?User $professional): self
+    public function setProfessional(?IdUser $professional): self
     {
         $this->professional = $professional;
         return $this;
@@ -97,12 +97,12 @@ class Avis
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?IdUser
     {
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function setUser(IdUser $user): static
     {
         $this->user = $user;
         return $this;
