@@ -1,0 +1,21 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+.error-container  {
+    display: flex;
+    align-items: center;
+    background-color:#FFDEDE;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    margin-left: 2px;
+}
+
+.form-error {
+    color: red;
+}

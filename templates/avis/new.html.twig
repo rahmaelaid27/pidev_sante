@@ -1,0 +1,105 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}New Avis{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('css/avis.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5"
+         style=
+         "display: flex;
+         justify-content: start;
+         flex-direction: column;
+         border: 1px solid #1A76D1;
+         border-radius: 5px;
+         padding: 30px;
+    ">
+        <h2 class="mb-4 text-center">Formulaire d'Avis</h2>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        {{ form_row(form._token) }}
+
+        {# Display global form errors #}
+        {{ form_errors(form) }}
+
+        <div class="form-group mb-3">
+            <label style="color: #040504">{{ form_label(form.note) | raw }}</label> <span style="color: red">*</span>
+            {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
+            <div class="text-danger">
+                {{ form_errors(form.note, {'attr': {'class': 'form-error'}}) }}
+            </div>
+        </div>
+
+
+        <div class="form-group mb-3">
+            <label style="color: #040504">{{ form_label(form.commentaire, 'Commentaire') }}</label> <span style="color: red">*</span>
+            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+            <div class="text-danger">
+                {{ form_errors(form.commentaire) }}
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label style="color: #040504">{{ form_label(form.date_avis, 'Date de l\'avis') }}</label> <span style="color: red">*</span>
+            {{ form_widget(form.date_avis, {'attr': {'class': 'form-control'}}) }}
+            <div class="text-danger">
+            {{ form_errors(form.date_avis) }}
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_widget(form.professional, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.professional) }} {# Display field-specific errors #}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary ml-5 w-20'}}) }}
+        </div>
+
+        <a href="{{ path('app_avis_list') }}" class="btn btn-info btn-sm mx-2">
+            liste des Avis
+        </a>
+
+        {{ form_end(form) }}
+
+
+    </div>
+
+    {% if success %}
+        <div class="alert alert-success">Form submitted successfully!</div>
+    {% endif %}
+
+
+    <script>
+        // Validation JS
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let isValid = true;
+            const note = document.querySelector('[name="form[note]"]');
+            const commentaire = document.querySelector('[name="form[commentaire]"]');
+            const form = event.target;
+
+            // Check for note (should be between 1 and 5)
+            if (note.value < 1 || note.value > 5) {
+                isValid = false;
+                note.classList.add('is-invalid');
+            } else {
+                note.classList.remove('is-invalid');
+            }
+
+            // Check for commentaire (should not be empty)
+            if (commentaire.value.trim() === "") {
+                isValid = false;
+                commentaire.classList.add('is-invalid');
+            } else {
+                commentaire.classList.remove('is-invalid');
+            }
+
+            // Prevent form submission if invalid
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}

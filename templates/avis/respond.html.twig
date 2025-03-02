@@ -1,0 +1,62 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Respond to Feedback{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 mb-5">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0 text-white">Respond to {{ avis.user.nameUser }}'s Feedback :</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Display Avis details -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">Feedback Details : </h5>
+                            <div class="mb-2">
+                                <strong class="text-dark">Patient:</strong> <span class="text-muted">{{ avis.user.nameUser }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="text-dark">Professionnel:</strong> <span class="text-muted">{{ avis.professional.nameUser }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="text-dark">Commentaire:</strong>
+                                <span class="text-muted">{{ avis.commentaire }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="text-dark">Note:</strong> <span class="text-muted">{{ avis.note }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong class="text-dark">Date:</strong> <span class="text-muted">{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</span>
+                            </div>
+                        </div>
+
+                        <h5 class="text-primary mb-2">Your Response</h5>
+
+
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        <div class="mb-3">
+                            {{ form_widget(form.reponse, {
+                                'attr': {'class': 'form-control', 'placeholder': 'Write your response here...'}
+                            }) }}
+                            <div class="text-danger">
+                                {{ form_errors(form.reponse) }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Submit Response</button>
+
+                            <a href="{{ path('app_avis_list') }}" class="btn btn-secondary">Back to Reviews</a>
+
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

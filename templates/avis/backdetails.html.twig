@@ -1,0 +1,64 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Détails de l'Avis{% endblock %}
+
+{% block content %}
+    <style>
+        /* Ajoute un espacement de 25px entre les colonnes */
+        table {
+            border-collapse: separate;
+            border-spacing: 20px; /* Espacement entre les colonnes */
+        }
+
+        
+
+        /* Si tu veux ajuster la largeur de certaines colonnes, tu peux utiliser cette règle */
+        
+    </style>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Détails de l'Avis</h2>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Avis de {{ avis.user.nom }}</h4>
+            </div>
+
+            <div class="card-body">
+                <p><strong>Commentaire:</strong> {{ avis.commentaire }}</p>
+                <p><strong>Note:</strong> {{ avis.note }}/5</p>
+                <p><strong>Date:</strong> {{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</p>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Réponses</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Réponse</th>
+                    <th>Date</th>
+                    <th>Professionnel</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for reponse in reponses %}
+                    <tr>
+                        <td>{{ reponse.id }}</td>
+                        <td>{{ reponse.reponse }}</td>
+                        <td>{{ reponse.dateReponse ? reponse.dateReponse|date('Y-m-d') : '--' }}</td>
+                        <td>{{ reponse.professional.nom }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucune réponse disponible</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{{ path('admin_avis_list') }}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+{% endblock %}
