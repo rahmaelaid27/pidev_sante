@@ -255,10 +255,17 @@
 
                         <div class="card-body">
                             <div class="table-responsive">
+<<<<<<< HEAD
                                 <table id="avis-table" class="table table-hover table-bordered">
                                     <thead class="thead-dark">
                                     <tr>
                                         <th>Patient</th>
+=======
+                                <table id="avis-table" class="table table-striped table-hover table-bordered">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Utilisateur</th>
+>>>>>>> 74e25789bc5db4d91b65fb9abbcb826ecbfc4009
                                         <th>Professionnel</th>
                                         <th>Note</th>
                                         <th>Commentaire</th>
@@ -272,12 +279,20 @@
                                             <td>{{ avis.getUser().nameUser }}</td>
                                             <td>{{ avis.professional.nameUser }}</td>
                                             <td>
+<<<<<<< HEAD
                                                 <div class="badge {% if avis.note >= 4 %}badge-success{% elseif avis.note == 3 %}badge-warning{% else %}badge-danger{% endif %}">
+=======
+                                                <div class="badge {% if avis.note >= 4 %}badge-success{% elseif avis.note >= 2 %}badge-warning{% else %}badge-danger{% endif %}">
+>>>>>>> 74e25789bc5db4d91b65fb9abbcb826ecbfc4009
                                                     {{ avis.note }}
                                                 </div>
                                             </td>
                                             <td>{{ avis.commentaire }}</td>
+<<<<<<< HEAD
                                             <td>{{ avis.dateAvis ? avis.dateAvis|date('d/m/Y') }}</td>
+=======
+                                            <td>{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</td>
+>>>>>>> 74e25789bc5db4d91b65fb9abbcb826ecbfc4009
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     <!-- View Details Button -->
@@ -286,11 +301,17 @@
                                                     </a>
 
                                                     <!-- Respond Button -->
+<<<<<<< HEAD
                                                     {% if app.user != avis.user %}
                                                         <a href="{{ path('respond_avis', {'avisId': avis.ref }) }}" class="btn btn-primary btn-sm mx-2" data-toggle="tooltip" title="Respond">
                                                             <i class="fa fa-reply"></i>
                                                         </a>
                                                     {% endif %}
+=======
+                                                    <a href="{{ path('respond_avis', {'avisId': avis.ref }) }}" class="btn btn-primary btn-sm mx-2" data-toggle="tooltip" title="Respond">
+                                                        <i class="fa fa-reply"></i>
+                                                    </a>
+>>>>>>> 74e25789bc5db4d91b65fb9abbcb826ecbfc4009
 
                                                     <!-- Delete Button (only for the logged-in user who owns the avis) -->
 {#                                                    {% if app.user == avis.user %}#}
@@ -326,6 +347,7 @@
 
     <!-- Add tooltips for buttons -->
     <script>
+<<<<<<< HEAD
         $(document).ready(function () {
             const $searchInput = $("#search");
             const $table = $("table");
@@ -359,6 +381,11 @@
             });
         });
 
+=======
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+>>>>>>> 74e25789bc5db4d91b65fb9abbcb826ecbfc4009
     </script>
 
 {% endblock %}

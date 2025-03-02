@@ -74,11 +74,9 @@ final class AvisController extends AbstractController
 
         return $this->render('avis/index.html.twig', [
             'avisList' => $avisList,
-            'form' => $form->createView(),
+            'form' => $form->createView(), // Passer le formulaire à la vue
         ]);
     }
-
-
 
     #[Route('/new', name: 'app_avis_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, MailerService $mailerService): Response
@@ -117,6 +115,7 @@ final class AvisController extends AbstractController
                 <p><em>L'équipe Mediplus</em></p>
             ";
 
+            
             $mailerService->sendEmail($professionalEmail, $subject, $content);
 
             return $this->redirectToRoute('app_avis_new', [], Response::HTTP_SEE_OTHER);
