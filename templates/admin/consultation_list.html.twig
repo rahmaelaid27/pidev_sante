@@ -1,0 +1,62 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Gestion des Avis{% endblock %}
+
+{#{% block styles %}#}
+{#    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">#}
+{#{% endblock %}#}
+
+{% block content %}
+
+    <style>
+        /* Ajoute un espacement de 25px entre les colonnes */
+        table {
+            border-collapse: separate;
+            border-spacing: 20px; /* Espacement entre les colonnes */
+        }
+    </style>
+    <div class="container mt-5">
+        <h2 class="mb-4">Liste des Avis</h2>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Avis des Utilisateurs</h4>
+            </div>
+
+            <div class="card-body">
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Utilisateur</th>
+                            <th>Professionel</th>
+
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for consultation in consultations %}
+                            <tr>
+                                <td>{{ consultation.id }}</td>
+                                <td>{{ consultation.user.nom }}</td>
+                                <td>{{ consultation.professionnel.nom }}</td>
+
+
+                                <td class="actions">
+                                    <a href="{{ path('admin_consultation_details', {'id': consultation.id }) }}" class="view-btn" title="Voir Détails">View</a>
+
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="no-data">Aucun avis disponible</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

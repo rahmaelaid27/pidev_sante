@@ -271,12 +271,15 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+<<<<<<< HEAD
 #content nav .profile img {
 	width: 36px;
 	height: 36px;
 	object-fit: cover;
 	border-radius: 50%;
 }
+=======
+>>>>>>> hasna
 /*
 #content nav .logo-container {
 	width: 36px;

@@ -1,0 +1,61 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Statistiques - Professionnel{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Statistiques des Avis</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow p-3 mb-4">
+                    <h5 class="text-center">Note Moyenne</h5>
+                    <h3 class="text-center text-primary">{{ averageRating }}/5</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow p-3 mb-4">
+                    <h5 class="text-center">Nombre Total d'Avis</h5>
+                    <h3 class="text-center text-success">{{ totalAvis }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow p-4">
+            <h4 class="text-center">Distribution des Notes</h4>
+            <canvas id="ratingChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("{{ path('stats_data') }}")
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById("ratingChart").getContext("2d");
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: "Nombre d'avis",
+                                data: data.data,
+                                backgroundColor: ["#ff4d4d", "#ff9933", "#ffcc00", "#99cc33", "#33cc33"],
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                            },
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
+
+{% endblock %}

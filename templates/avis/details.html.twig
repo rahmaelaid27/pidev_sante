@@ -1,0 +1,77 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-lg border-gray">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title mb-0 text-white">Avis Details :</h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">User:</h5>
+                                <p>{{ avis.user.nameUser }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">Professional:</h5>
+                                <p>{{ avis.professional.nameUser }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">Rating:</h5>
+                                <p>
+                                    <span class="badge bg-warning text-dark">{{ avis.note }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="font-weight-bold">Date:</h5>
+                                <p>{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-weight-bold">Comment:</h5>
+                            <p>{{ avis.commentaire }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-weight-bold mb-3">Responses:</h5>
+                            {% if reponses is empty %}
+                                <p class="text-muted">No responses yet.</p>
+                            {% else %}
+                                <div class="list-group">
+                                    {% for reponse in reponses %}
+                                        <div class="list-group-item">
+                                            <h6 class="font-weight-bold">{{ reponse.madeBy.nameUser }}</h6>
+                                            <p>{{ reponse.reponse }}</p>
+                                            <small class="text-muted">Responded on: {{ reponse.dateReponse|date('Y-m-d') }}</small>
+
+                                            {# Check if the logged-in user is the owner of the response #}
+                                            {% if app.user == reponse.madeBy %}
+                                                <div class="mt-3">
+                                                    <a href="{{ path('update_response', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
+                                                        <i class="fa fa-edit"></i> Update
+                                                    </a>
+                                                    <form action="{{ path('delete_response', {'id': reponse.id}) }}" method="POST" style="display:inline;">
+                                                        <button type="submit" class="btn  btn-sm" style="background-color: red">
+                                                            <i class="fa fa-trash"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

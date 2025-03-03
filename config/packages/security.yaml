@@ -19,7 +19,7 @@ security:
                 check_path: front_login
                 username_parameter: email  # Remplace "username" par "email"
                 password_parameter: password
-                default_target_path: front_redirect
+                default_target_path: app_avis_new
             logout:
                 path: front_logout
                 target: front_login
