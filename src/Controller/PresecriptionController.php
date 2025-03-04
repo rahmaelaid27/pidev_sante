@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controller;
+use \Symfony\Component\HttpFoundation\Response;
+use \Symfony\Component\HttpFoundation\RedirectResponse;
 
 use App\Entity\Consultation;
 use App\Entity\Prescription;
@@ -82,7 +84,7 @@ class PresecriptionController extends AbstractController
     }
 
     #[Route('/presecriptions', name: 'presecriptions_list')]
-    public function list(ConsultationRepository $consultationRepository): \Symfony\Component\HttpFoundation\Response
+    public function list(ConsultationRepository $consultationRepository): Response
     {
 
         $user=$this->getUser();
@@ -95,7 +97,7 @@ class PresecriptionController extends AbstractController
     }
 
     #[Route('/prescription/delete/{id}', name: 'prescription_delete')]
-    public function delete(int $id, PrescriptionRepository $prescriptionRepository, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function delete(int $id, PrescriptionRepository $prescriptionRepository, EntityManagerInterface $entityManager): RedirectResponse
     {
 
         $prescription = $prescriptionRepository->find($id);
@@ -112,6 +114,35 @@ class PresecriptionController extends AbstractController
             $this->addFlash('error', 'Prescription not found!');
         }
         return $this->redirectToRoute('consultations_list');
+    }
+
+    #[Route('/prescription/edit/{id}', name: 'app_edit_presecription')]
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $presecription = $entityManager->getRepository(Prescription::class)->find($id);
+
+        if (!$presecription) {
+            $this->addFlash('error', 'presecription not found!');
+            return $this->redirectToRoute('app_dashboard');
+        }
+
+        $form = $this->createForm(PrescriptionType::class, $presecription);
+
+        $form->handleRequest($request);
+
+        
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'presecription updated successfully.');
+            return $this->redirectToRoute('presecriptions_list');
+        }
+
+        return $this->render('presecription/edit.html.twig', [
+            'form' => $form->createView(),
+            'presecription' => $presecription,
+        ]);
     }
 
 }

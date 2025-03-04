@@ -173,6 +173,12 @@ class ConsultationController extends AbstractController
             'consultations' => $consultations,
         ]);
     }
+    #[Route('/home', name: 'app_mediplus_home')]
+    public function home(ConsultationRepository $consultationRepository): Response
+    {
+        
+        return $this->render('index.html.twig');
+    }
 
 
 
