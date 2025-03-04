@@ -1,0 +1,35 @@
+<h1 class="text-center mb-4">Edit Appointment</h1>
+{{ form_start(form, { 'action': path('admin_rendez_edit', {'id': rendez.id}) }) }}
+
+
+<div class="form-group mb-3 row">
+    {{ form_label(form.professional, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+    <div class="col-sm-9">
+        {{ form_widget(form.professional, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.professional) }}
+    </div>
+</div>
+
+<div class="form-group mb-3 row">
+    {{ form_label(form.dateRendez, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+    <div class="col-sm-9">
+        {{ form_widget(form.dateRendez, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.dateRendez) }}
+    </div>
+</div>
+
+<div class="form-group mb-3 row">
+    {{ form_label(form.statuPaiement, null, {'label_attr': {'class': 'col-sm-3 col-form-label'}}) }}
+    <div class="col-sm-9">
+        {{ form_widget(form.statuPaiement, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.statuPaiement) }}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-sm-9 offset-sm-3">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</div>
+
+{{ form_end(form) }}

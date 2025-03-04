@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une Facture{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Créer une Facture</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card mx-auto shadow" style="max-width: 600px;">
+            <div class="card-header bg-primary text-white">
+                <strong>Nouvelle Facture</strong>
+            </div>
+            <div class="card-body">
+                {# 1) Start the form. 'Enregistrer' should be a <button> not a link #}
+                {{ form_start(form, { 'attr': { 'novalidate': 'novalidate' } }) }}
+
+                <div class="mb-3">
+                    {{ form_label(form.montant, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.montant, {'attr': {'class': 'form-control'}}) }}
+                    <div class="text-danger">{{ form_errors(form.montant) }}</div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.date, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                    <div class="text-danger">{{ form_errors(form.date) }}</div>
+                </div>
+
+                <div class="d-grid">
+                    {# This button actually submits the form to the new() action in your controller #}
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ path('facture_index') }}" class="btn btn-secondary">
+                    Back to list
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

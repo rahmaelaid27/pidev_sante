@@ -1,0 +1,51 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">My Appointments</h1>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                Appointment List
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>Payment Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for rendez_vou in rendezs %}
+                            <tr>
+                                <td>{{ rendez_vou.id }}</td>
+                                <td>{{ rendez_vou.user.nameUser }}</td>
+                                <td>{{ rendez_vou.dateRendez ? rendez_vou.dateRendez|date('Y-m-d') : '' }}</td>
+                                <td>
+                                    {% if rendez_vou.statuPaiement == 'paid' %}
+                                        <span class="badge bg-success">Paid</span>
+                                    {% elseif rendez_vou.statuPaiement == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Failed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-danger">No appointments found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

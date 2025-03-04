@@ -1,0 +1,13 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<div>
+    {{ form_label(form.reponse) }}
+    {{ form_widget(form.reponse) }}
+    {% if form.reponse.vars.errors|length > 0 %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.reponse) }}
+        </div>
+    {% endif %}
+</div>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

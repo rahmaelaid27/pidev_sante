@@ -1,0 +1,70 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Gestion des Avis{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <style>
+        table {
+            border-collapse: separate;
+            border-spacing: 20px;
+        }
+
+    </style>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Liste des Avis</h2>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Avis des Utilisateurs</h4>
+            </div>
+
+            <div class="card-body">
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Utilisateur</th>
+                            <th>Commentaire</th>
+                            <th>Note</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for avis in avisList %}
+                            <tr>
+                                <td>{{ avis.ref }}</td>
+                                <td>{{ avis.user.nom }}</td>
+                                <td>{{ avis.commentaire }}</td>
+                                <td>
+                                    <span class="badge {% if avis.note >= 4 %}high{% elseif avis.note >= 2 %}medium{% else %}low{% endif %}">
+                                        {{ avis.note }}/5
+                                    </span>
+                                </td>
+                                <td>{{ avis.dateAvis ? avis.dateAvis|date('Y-m-d') : '--' }}</td>
+                                <td class="actions">
+                                    <a href="{{ path('admin_avis_details', {'id': avis.ref }) }}" class="view-btn" title="Voir Détails">View</a>
+                                    <button type="submit" class="delete-btn">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="no-data">Aucun avis disponible</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

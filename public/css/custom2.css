@@ -1,0 +1,26 @@
+/* Ajoute un espacement de 25px entre les colonnes */
+table {
+    border-collapse: separate;
+    border-spacing: 25px; /* Espacement entre les colonnes */
+}
+
+th, td {
+    padding: 10px;  /* Ajoute un padding à l'intérieur des cellules */
+}
+
+/* Si tu veux ajuster la largeur de certaines colonnes, tu peux utiliser cette règle */
+th:nth-child(1), td:nth-child(1) {
+    width: 10%;
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 40%;
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 20%;
+}
+
+th:nth-child(4), td:nth-child(4) {
+    width: 30%;
+}

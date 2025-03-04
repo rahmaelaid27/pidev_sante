@@ -1,0 +1,48 @@
+{# templates/rendez_vous/calendar.html.twig #}
+{% extends 'front.html.twig' %}
+{# or your main layout, e.g. "base-front.html.twig" or the big HTML file you showed #}
+
+{% block title %}Calendrier des Rendez-vous{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Mes Rendez-vous</h1>
+
+    <!-- 1) Include FullCalendar via CDN (quick usage) -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js"></script>
+
+    <!-- 2) Simple styling to shrink & center the calendar -->
+    <style>
+        .calendar-container {
+            max-width: 700px;    /* Adjust as you like */
+            margin: 0 auto;      /* Centers horizontally */
+        }
+    </style>
+
+    <!-- 3) Our container for the calendar -->
+    <div class="calendar-container">
+        <div id="calendar"></div>
+    </div>
+
+    <!-- 4) Initialize FullCalendar with patient's Rendez data -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 'auto',
+
+                events: [
+                    {% for rdv in rendezs %}
+                    {
+                        title: 'Rendez-vous #{{ rdv.id }}',
+                        start: '{{ rdv.dateRendez|date("Y-m-d") }}',
+                        end: '{{ rdv.dateRendez|date("Y-m-d") }}'
+                    },
+                    {% endfor %}
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock %}

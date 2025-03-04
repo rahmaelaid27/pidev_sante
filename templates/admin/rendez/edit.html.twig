@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Appointment{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                Edit Appointment
+            </div>
+            <div class="card-body">
+                {{ form_start(form, { 'action': path('admin_rendez_edit', {'id': rendez.id}) }) }}
+
+                {% include 'admin/rendez/_form_admin.html.twig' with { 'form': form } %}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ path('admin_rendez_list') }}" class="btn btn-link">Back to Appointments</a>
+        </div>
+    </div>
+{% endblock %}

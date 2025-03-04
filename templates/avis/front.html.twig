@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}MediPlus Admin{% endblock %}</title>
+    <link rel="icon" href="{{ asset('img/favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    {% block css %}
+        <link rel="stylesheet" href="{{ asset('back/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('back/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('back/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('back/responsive.css') }}">
+    {% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="{{ path('dashboard') }}" class="brand">
+            <i class='fa fa-heartbeat'></i>
+            <span class="text">MediPlus</span>
+        </a>
+        <ul class="side-menu top">
+            <li><a href="{{ path('dashboard') }}"><i class='fa fa-dashboard'></i> Dashboard</a></li>
+            <li><a href="{{ path('admin_avis_list') }}"><i class='fa fa-comments'></i> Gestion des Avis</a></li>
+            <li><a href="{{ path('gestion_consultation') }}"><i class='fa fa-calendar'></i> Gestion Consultation</a></li>
+            <li><a href="{{ path('gestion_rdv') }}"><i class='fa fa-calendar-check'></i> Gestion Rendez-vous</a></li>
+            <li><a href="{{ path('gestion_specialites') }}"><i class='fa fa-hospital-o'></i> Gestion Spécialités</a></li>
+            <li><a href="{{ path('ajouter_user') }}"><i class='fa fa-user'></i> Gestion Utilisateurs</a></li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="{{ path('logout') }}" class="logout"><i class='fa fa-sign-out'></i> Déconnexion</a></li>
+        </ul>
+    </section>
+    <!-- Fin Sidebar -->
+
+    <!-- Contenu Principal -->
+    <section id="content">
+        <nav>
+            <i class='fa fa-bars' id="toggle-menu"></i>
+            <a href="{{ path('dashboard') }}" class="nav-link">Dashboard</a>
+        </nav>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </section>
+    <!-- Fin Contenu Principal -->
+
+    {% block js %}
+        <script src="{{ asset('back/jquery.min.js') }}"></script>
+        <script src="{{ asset('back/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('back/script.js') }}"></script>
+        <script>
+            document.getElementById("toggle-menu").addEventListener("click", function () {
+                document.getElementById("sidebar").classList.toggle("active");
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

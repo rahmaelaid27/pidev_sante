@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture #{{ facture.id }} - MediPlus</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #333;
+            padding: 20px;
+        }
+
+        /* Header */
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #008cba;
+            padding-bottom: 10px;
+        }
+        .invoice-header .logo {
+            font-weight: bold;
+            font-size: 20px;
+            color: #008cba;
+        }
+        .invoice-header img {
+            max-height: 50px;
+        }
+
+        .invoice-title {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .invoice-title h1 {
+            color: #008cba;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        .invoice-title h2 {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .details {
+            margin-bottom: 20px;
+        }
+        .details .label {
+            font-weight: bold;
+            width: 120px;
+            display: inline-block;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table thead {
+            background-color: #008cba;
+            color: #fff;
+        }
+        table thead th {
+            padding: 10px;
+            text-align: left;
+        }
+        table tbody tr td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+
+        /* Footer / Signature */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .signature {
+            margin-top: 40px;
+            text-align: right;
+        }
+        .signature .sign-line {
+            display: inline-block;
+            border-top: 1px solid #000;
+            width: 200px;
+            margin-bottom: 5px;
+        }
+        .signature p {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-header">
+    <div class="logo">
+        <img src="public/assets-front/img/logo.png" alt="MediPlus Logo">
+    </div>
+    <div>
+        <strong>MediPlus - Clinique</strong><br>
+        123 Avenue du Centre, 75000 Tunis<br>
+        Téléphone: +24 55 26 62
+    </div>
+</div>
+
+<div class="invoice-title">
+    <h1>Facture #{{ facture.id }}</h1>
+    <h2>Date: {{ facture.date ? facture.date|date('d/m/Y') : 'N/A' }}</h2>
+</div>
+
+<div class="details">
+    <span class="label">Nom du Patient:</span> {{ facture.rendez ? facture.rendez.user.nameUser : 'N/A' }}<br>
+    <span class="label">ID Patient:</span> {{ facture.rendez ? facture.rendez.user.id : 'N/A' }}<br>
+    <span class="label">Montant:</span> {{ facture.montant }} DT
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Prestation</th>
+        <th class="text-right">Prix (DT)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Example items: if your invoice has details, list them. Otherwise, skip -->
+    <tr>
+        <td>Consultation Médicale</td>
+        <td class="text-right">{{ facture.montant }}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="signature">
+    <div class="sign-line"></div>
+    <p>Médecin / Responsable Clinique</p>
+</div>
+
+<div class="footer">
+    Merci pour votre confiance.<br>
+    Ceci est un document généré par voie électronique - aucune signature manuscrite n’est nécessaire.
+</div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Détails de la Consultation{% endblock %}
+
+{% block content %}
+
+    <style>
+        /* Ajoute un espacement de 25px entre les colonnes */
+        table {
+            border-collapse: separate;
+            border-spacing: 20px; /* Espacement entre les colonnes */
+        }
+    </style>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Détails de la Consultation</h2>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Consultation du patient {{ consultation.user.nom }}</h4>
+            </div>
+
+            <div class="card-body">
+                <p><strong>Date de consultation:</strong> {{ consultation.dateConsultation ? consultation.dateConsultation|date('Y-m-d') : '--' }}</p>
+                <p><strong>Professionnel:</strong> {{ consultation.professionnel.nom }}</p>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Prescriptions</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for prescription in prescriptions %}
+                    <tr>
+                        <td>{{ prescription.id }}</td>
+                        <td>{{ prescription.description }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">Aucune prescription disponible</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{{ path('admin_consultation_list') }}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+{% endblock %}

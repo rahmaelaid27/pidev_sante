@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Utilisateurs{% endblock %}
+
+{% block content %}
+
+    <style>
+        /* Style du tableau */
+        .table-container {
+            width: 100%;
+            max-width: 1200px; /* Ajuste la largeur */
+            margin: auto; /* Centre le tableau */
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .user-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .user-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .btn-edit {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn-edit:hover, .btn-delete:hover {
+            opacity: 0.8;
+        }
+
+        /* Style des champs de formulaire */
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background: #0056b3;
+        }
+    </style>
+
+    <div class="head-title">
+        <div class="left">
+            <h1>Gestion des Utilisateurs</h1>
+            <ul class="breadcrumb">
+                <li><a href="{{ path('ajouter_user') }}">Dashboard</a></li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li><a class="active" href="#">Ajouter / Modifier Utilisateur</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <!-- Formulaire d'ajout/modification -->
+    <form method="post" class="form-container">
+        {{ form_start(form) }}
+
+        <div>
+            {{ form_label(form.name_user) }}
+            {{ form_widget(form.name_user, { 'attr': {'class': 'form-input'} }) }}
+        </div>
+
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, { 'attr': {'class': 'form-input'} }) }}
+        </div>
+
+        <div>
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password, { 'attr': {'class': 'form-input'} }) }}
+        </div>
+
+        <div>
+            {{ form_label(form.role) }}
+            {{ form_widget(form.role, { 'attr': {'class': 'form-input'} }) }}
+        </div>
+
+
+
+        {{ form_end(form) }}
+    </form>
+
+    <!-- Liste des utilisateurs -->
+    <h2>Liste des Utilisateurs</h2>
+
+    <div class="table-container">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.nameUser }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            <a href="{{ path('modifier_user', {'id': user.id}) }}" class="btn-edit">Modifier</a>
+                            <a href="{{ path('supprimer_user', {'id': user.id}) }}" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucun utilisateur trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

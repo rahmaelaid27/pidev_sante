@@ -1,0 +1,17 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+logout:
+    path: /logout
+
+front_register:
+    path: /front/register
+    controller: App\Controller\Front\SecurityController::register
+
+front_login:
+    path: /front/login
+    controller: App\Controller\Front\SecurityController::login
+
+front_logout:
+    path: /front/logout

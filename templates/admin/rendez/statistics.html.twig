@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Statistics{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Appointment Statistics</h1>
+
+        <!-- Charts Section -->
+        <div class="row">
+            <!-- Payment Status Pie Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white">
+                        Payment Status Distribution
+                    </div>
+                    <div class="card-body">
+                        <canvas id="paymentPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visits by Month Spline Chart -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white">
+                        Appointments by Month
+                    </div>
+                    <div class="card-body">
+                        <canvas id="visitsSplineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Radar Chart Section -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-secondary text-white">
+                        Appointments per Professional
+                    </div>
+                    <div class="card-body">
+                        <canvas id="appointmentsRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patients Table -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Patients with at least one appointment</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Appointment Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for patient in patientData %}
+                        <tr>
+                            <td>{{ patient.id }}</td>
+                            <td>{{ patient.nameUser }}</td>
+                            <td>{{ patient.email }}</td>
+                            <td>{{ patient.appointmentCount }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No patients found.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Payment Pie Chart Data
+        const paymentLabels = [
+            {% for item in paymentData %}
+            "{{ item.statuPaiement|capitalize }}",
+            {% endfor %}
+        ];
+        const paymentCounts = [
+            {% for item in paymentData %}
+            {{ item.count }},
+            {% endfor %}
+        ];
+
+        const ctxPayment = document.getElementById('paymentPieChart').getContext('2d');
+        const paymentPieChart = new Chart(ctxPayment, {
+            type: 'pie',
+            data: {
+                labels: paymentLabels,
+                datasets: [{
+                    data: paymentCounts,
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Visits Spline Chart Data
+        // Prepare months array (1-12) with zero counts first
+        const visitsByMonth = Array(12).fill(0);
+        {% for item in visitsData %}
+        visitsByMonth[{{ item.month - 1 }}] = {{ item.count }};
+        {% endfor %}
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const ctxVisits = document.getElementById('visitsSplineChart').getContext('2d');
+        const visitsSplineChart = new Chart(ctxVisits, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Appointments',
+                    data: visitsByMonth,
+                    fill: false,
+                    borderColor: '#007bff',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Radar Chart Data (Appointments per Professional)
+        const radarLabels = [
+            {% for item in radarData %}
+            "{{ item.professional }}",
+            {% endfor %}
+        ];
+        const radarCounts = [
+            {% for item in radarData %}
+            {{ item.count }},
+            {% endfor %}
+        ];
+        const ctxRadar = document.getElementById('appointmentsRadarChart').getContext('2d');
+        const appointmentsRadarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    label: 'Appointments',
+                    data: radarCounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; padding: 50px 0;">
+        <div class="card shadow-lg p-4 rounded-4" style="max-width: 100%; width: 100%; background: #ffffff;">
+            <h2 class="text-center text-primary mb-4">My Appointments</h2>
+
+            {% if rendezVousList|filter(rdv => rdv.getStatusRdv() == 'en attente')|length == 0 %}
+                <div class="alert alert-info text-center" role="alert">
+                    No pending appointments at the moment.
+                </div>
+            {% else %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>User Name</th> <!-- Ajout du nom de l'utilisateur -->
+                        <th>Actions</th> <!-- Actions column is always visible here -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    {% for rendez_vou in rendezs %}
+                        {% if rendezvous.getStatusRdv() == 'en attente' %}
+                            <tr>
+                                <td>{{ rendezvous.getDateRdv()|date('d/m/Y H:i') }}</td>
+                                <td>Pending</td>
+                                <td>{{ rendezvous.user.nom }}</td>
+                                <td>
+                                    <!-- If status is 'en attente', show Accept button -->
+                                    <a href="{{ path('app_rendezvous_accept', {'id': rendez_vou.id}) }}" class="btn btn-success">Accept</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            <div class="text-center mt-3">
+                {# You can re-enable this link to return to the dashboard if needed #}
+                {# <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary w-100 py-2">⬅ Return to Dashboard</a> #}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">New RendezVous</h1>
+
+        {{ form_start(form, { 'attr': { 'novalidate': 'novalidate' } }) }}
+
+        <div class="form-group mb-3">
+            {{ form_label(form.user, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.user) }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.professional, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.professional, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.professional) }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.dateRendez, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.dateRendez, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.dateRendez) }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.statuPaiement, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.statuPaiement, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.statuPaiement) }}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+
+        {{ form_end(form) }}
+
+        <a href="{{ path('rendez_index') }}">Back to list</a>
+    </div>
+{% endblock %}

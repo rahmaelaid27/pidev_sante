@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <title>{% block title %}MediPlus : Votre santé, simplifiée et connectée{% endblock %}</title>
+        
+        <link rel="icon" href="{{ asset('assets-front/img/favicon.png') }}">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+
+        <!-- CSS Global -->
+        <link rel="stylesheet" href="{{ asset('assets-front/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets-front/css/style.css') }}">
+        
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="loader">
+                <div class="loader-outter"></div>
+                <div class="loader-inner"></div>
+            </div>
+        </div>
+        <!-- End Preloader -->
+
+        <!-- Header -->
+        <header class="header">
+            <div class="topbar">
+                <div class="container">
+                    <ul class="top-contact">
+                        <li><i class="fa fa-phone"></i>+216 95774817</li>
+                        <li><i class="fa fa-envelope"></i><a href="mailto:info@LifePulse.com">info@LifePulse.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="header-inner">
+                <div class="container">
+                    <nav class="navigation">
+                        <ul class="nav menu">
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="#">Doctors</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Pages <i class="icofont-rounded-down"></i></a>
+												<ul class="dropdown">
+													<li><a href="404.html">404 Error</a></li>
+												</ul>
+											</li>
+											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
+												<ul class="dropdown">
+													<li><a href="blog-single.html">Blog Details</a></li>
+												</ul>
+											</li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <!-- End Header -->
+
+        <!-- Main Content -->
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        
+        <!-- Footer -->
+        <footer id="footer" class="footer">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="single-footer">
+                        <h2>About Us</h2>
+                        <p>MediPlus connecte patients et professionnels de santé grâce à une plateforme simple, sécurisée et innovante.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+
+        <!-- JavaScript -->
+        <script src="{{ asset('assets-front/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets-front/js/bootstrap.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

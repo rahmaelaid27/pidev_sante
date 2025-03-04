@@ -1,0 +1,42 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+<!DOCTYPE html>
+
+<title>RendezVous index</title>
+<h1 class="text-center">Liste des Rendez-Vous</h1>
+
+<div class="container d-flex justify-content-center mt-4">
+    <div class="table-responsive" style="max-width: 60%;height: 40vh;">
+    
+        <table class="table table-bordered table-sm text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Id Patient</th>
+                    <th>Date Rendez-vous</th>
+                    <th>Statut Paiement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rendez_vou in rendezs %}
+                    <tr>
+                        <td>{{ rendez_vou.id }}</td>
+                        <td>{{ rendez_vou.idPatient }}</td>
+                        <td>{{ rendez_vou.dateRendezVous ? rendez_vou.dateRendezVous|date('Y-m-d') : '' }}</td>
+                        <td>{{ rendez_vou.statuPaiement }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-danger">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<br>
+<br>
+
+{% endblock %}

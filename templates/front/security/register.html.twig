@@ -1,0 +1,134 @@
+{% extends 'front/base_front.html.twig' %}
+
+{% block title %}Inscription - MediPlus{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Créer un compte</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <!-- Messages flash -->
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(registrationForm, {'attr': {'onsubmit': 'return validateForm()'}}) }} 
+
+                <!-- Champ Nom -->
+                <div class="form-group mt-3">
+                    {{ form_label(registrationForm.nameUser, 'Nom complet', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.nameUser, {'attr': {'class': 'form-control', 'id': 'nameUser'}}) }}
+                    <small id="nameUserError" class="text-danger"></small>
+                </div>
+
+                <!-- Champ Email -->
+                <div class="form-group mt-3">
+                    {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'id': 'email'}}) }}
+                    <small id="emailError" class="text-danger"></small>
+                </div>
+
+                <!-- Champ Mot de passe -->
+                <div class="form-group mt-3">
+                    {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'id': 'password'}}) }}
+                    <small id="passwordError" class="text-danger"></small>
+                </div>
+
+                <!-- Champ Confirmation Mot de passe -->
+                <div class="form-group mt-3">
+                    {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'id': 'confirmPassword'}}) }}
+                    <small id="confirmPasswordError" class="text-danger"></small>
+                </div>
+
+                <!-- Champ Rôle -->
+                <div class="form-group mt-3">
+                    {{ form_label(registrationForm.role, 'Rôle', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control', 'id': 'role'}}) }}
+                    <small id="roleError" class="text-danger"></small>
+                </div>
+
+                <!-- Bouton d'inscription -->
+  
+
+            {{ form_end(registrationForm) }}
+            <div class="text-center mb-3">
+    <a href="{{ path('connect_google_start') }}" class="btn btn-bleu">
+        <i class="fab fa-google"></i> S'inscrire avec Google
+    </a>
+</div>
+
+            <div class="text-center mt-3">
+                <a href="{{ path('front_login') }}">Déjà un compte ? Connectez-vous</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT DE VALIDATION -->
+<script>
+    function validateForm() {
+        let isValid = true;
+
+        // Réinitialiser les messages d'erreur
+        document.getElementById("nameUserError").innerText = "";
+        document.getElementById("emailError").innerText = "";
+        document.getElementById("passwordError").innerText = "";
+        document.getElementById("confirmPasswordError").innerText = "";
+        document.getElementById("roleError").innerText = "";
+
+        // Récupérer les valeurs des champs
+        let nameUser = document.getElementById("nameUser").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value;
+        let confirmPassword = document.getElementById("confirmPassword").value;
+        let role = document.getElementById("role").value.trim();
+
+        // Validation du nom
+        if (nameUser.length < 3 || nameUser.length > 50) {
+            document.getElementById("nameUserError").innerText = "Le nom doit contenir entre 3 et 50 caractères.";
+            isValid = false;
+        }
+
+        // Validation de l'email
+        let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+            document.getElementById("emailError").innerText = "Veuillez entrer une adresse email valide.";
+            isValid = false;
+        }
+
+        // Validation du mot de passe
+        if (password.length < 6) {
+            document.getElementById("passwordError").innerText = "Le mot de passe doit contenir au moins 6 caractères.";
+            isValid = false;
+        }
+
+        // Vérification de la confirmation du mot de passe
+        if (password !== confirmPassword) {
+            document.getElementById("confirmPasswordError").innerText = "Les mots de passe ne correspondent pas.";
+            isValid = false;
+        }
+
+        // Validation du rôle
+        let validRoles = ["admin", "professionnel", "patient"];
+        if (!validRoles.includes(role.toLowerCase())) {
+            document.getElementById("roleError").innerText = "Le rôle doit être 'admin', 'professionnel' ou 'patient'.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+
+{% endblock %}

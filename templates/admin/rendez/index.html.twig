@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Appointments{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Admin - Appointments</h1>
+
+        <!-- Search, Sort, and Statistics Button Row -->
+        <form method="get" class="mb-4">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search appointments..." value="{{ app.request.query.get('search') }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="sort_by" class="form-select">
+                        <option value="id" {% if app.request.query.get('sort_by') == 'id' %}selected{% endif %}>ID</option>
+                        <option value="dateRendez" {% if app.request.query.get('sort_by') == 'dateRendez' %}selected{% endif %}>Date</option>
+                        <option value="statuPaiement" {% if app.request.query.get('sort_by') == 'statuPaiement' %}selected{% endif %}>Payment Status</option>
+                        <option value="user.nameUser" {% if app.request.query.get('sort_by') == 'user.nameUser' %}selected{% endif %}>Patient</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="order" class="form-select">
+                        <option value="ASC" {% if app.request.query.get('order') == 'ASC' %}selected{% endif %}>ASC</option>
+                        <option value="DESC" {% if app.request.query.get('order') == 'DESC' %}selected{% endif %}>DESC</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Apply</button>
+                </div>
+                <div class="col-md-2">
+                    <a href="{{ path('admin_rendez_stats') }}" class="btn btn-secondary w-100">Show Statistics</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                Appointment List
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>
+                                <a href="?sort_by=id&order={{ app.request.query.get('order') == 'ASC' ? 'DESC' : 'ASC' }}">ID</a>
+                            </th>
+                            <th>Patient</th>
+                            <th>
+                                <a href="?sort_by=dateRendez&order={{ app.request.query.get('order') == 'ASC' ? 'DESC' : 'ASC' }}">Date</a>
+                            </th>
+                            <th>
+                                <a href="?sort_by=statuPaiement&order={{ app.request.query.get('order') == 'ASC' ? 'DESC' : 'ASC' }}">Payment Status</a>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for rendez in rendezs %}
+                            <tr>
+                                <td>{{ rendez.id }}</td>
+                                <td>{{ rendez.user.nameUser }}</td>
+                                <td>{{ rendez.dateRendez ? rendez.dateRendez|date('Y-m-d') : '' }}</td>
+                                <td>
+                                    {% if rendez.statuPaiement == 'paid' %}
+                                        <span class="badge bg-success">Paid</span>
+                                    {% elseif rendez.statuPaiement == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Failed</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('rendez_show', {'id': rendez.id}) }}" class="btn btn-sm btn-info">Show</a>
+                                    <a href="{{ path('admin_rendez_edit', {'id': rendez.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ path('admin_rendez_delete', {'id': rendez.id}) }}" method="post" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rendez.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this appointment?');">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-danger">No appointments found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Liste des Factures</h1>
+
+        <!-- DataTables automatically adds a search box & column sorting -->
+        <table id="facturesTable" class="display table table-striped">
+            <thead>
+            <tr>
+                <th>ID Facture</th>
+                <th>Montant (DT)</th>
+                <th>Date</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for facture in factures %}
+                <tr>
+                    <td>{{ facture.id }}</td>
+                    <td>{{ facture.montant }}</td>
+                    <td>{{ facture.date ? facture.date|date('Y-m-d') : 'N/A' }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('facture_show', {'id': facture.id}) }}" class="btn btn-sm btn-info me-1">Show</a>
+                        <a href="{{ path('facture_edit', {'id': facture.id}) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                        {{ include('fact/_delete_form.html.twig', { 'facture': facture }) }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-danger">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DataTables scripts -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#facturesTable').DataTable();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.front.html.twig' %}
+
+{% block head %}
+    <!-- Stylesheets -->
+    <link href="front/mouhanned/css/bootstrap.css" rel="stylesheet">
+    <link href="front/mouhanned/css/responsive.css" rel="stylesheet">
+    <link href="front/mouhanned/css/style.css" rel="stylesheet">
+
+    <!-- mobile responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock %}
+{% block content %}
+<!--Service Section-->
+<section class="service-section">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>Our <span>Blocs</span></h3>
+            <p>Tracking immunizations has never been easier or more secure with Florida SHOTS™. To print your child's <br>To print your child's record, you will needrecord, you will need</p>
+        </div>
+        <div class="sortable-masonry">
+            <div class="filters text-center">
+                <ul class="filter-tabs filter-btns clearfix">
+                    {% for bloc in blocs %}
+                        <li class="active filter" data-role="button" data-filter=".{{ bloc.nom }}"><div class="tab-btn"><i class="flaticon-medical"></i>{{ bloc.nom }}</div></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="row items-container clearfix">
+                {% for spec in specialites %}
+                <div class="col-md-4 col-sm-6 col-xs-12 masonry-item {{ spec.idBloc.nom}}">
+                    <div class="inner-box">
+                        <div class="image-content text-center">
+                            <span>Capitalize on low hanging</span>
+                            <a href="service-details"><h6>{{ spec.nom }}</h6></a>
+                            <p>{{ spec.description }}</p>
+                            <div class="link-btn">
+                                <a href="service-details" class="btn-style-two">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block script %}
+    <script src="front/mouhanned/js/jquery.js"></script>
+    <script src="front/mouhanned/js/bootstrap.min.js"></script>
+    <script src="front/mouhanned/js/bootstrap-select.min.js"></script>
+    <script src="front/mouhanned/js/jquery.fancybox.pack.js"></script>
+    <script src="front/mouhanned/js/jquery.fancybox-media.js"></script>
+    <script src="front/mouhanned/js/html5lightbox.js"></script>
+    <script src="front/mouhanned/js/isotope.js"></script>
+    <script src="front/mouhanned/js/masterslider/masterslider.js"></script>
+
+    <!-- revolution slider js -->
+    <script src="/front/mouhanned/assets/revolution/js/jquery.themepunch.tools.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/jquery.themepunch.revolution.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+    <script src="/front/mouhanned/assets/revolution/js/extensions/revolution.extension.video.min.js"></script>
+
+    <script src="front/mouhanned/js/owl.js"></script>
+    <script src="front/mouhanned/js/owl.carousel.min.js"></script>
+    <script src="front/mouhanned/js/validate.js"></script>
+    <script src="front/mouhanned/js/jquery.appear.js"></script>
+    <script src="front/mouhanned/js/jquery.countTo.js"></script>
+    <script src="front/mouhanned/js/wow.js"></script>
+    <script src="front/mouhanned/js/jquery-ui.js"></script>
+    <script src="front/mouhanned/js/timePicker.js"></script>
+    <script src="front/mouhanned/js/pie-chart.js"></script>
+
+    <script src="front/mouhanned/js/script.js"></script>{% endblock %}
+

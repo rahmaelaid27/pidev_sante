@@ -1,0 +1,37 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 ">
+                <div class="card shadow-lg border-primary border-2 rounded-lg">
+                    <div class="card-header bg-primary text-white rounded-top">
+                        <h4 class="card-title mb-0 text-white">Update Your Response :</h4>
+                    </div>
+                    <div class="card-body p-5">
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        <div class="mb-5">
+                            <label for="reponse" class="form-label fs-5 text-secondary">Your Response</label>
+                            {{ form_widget(form.reponse, {'attr': {'class': 'form-control form-control-lg rounded-pill shadow-sm', 'placeholder': 'Write your response here...'}}) }}
+                            <div class="text-danger mt-2">
+                                {{ form_errors(form.reponse) }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="submit" style="font-size: 14px; padding: 13px 25px; font-weight: 500" class=" btn-success btn-lg rounded-pill px-4 py-2 shadow">
+                                <i class="fa fa-save me-2"></i> Save Response
+                            </button>
+                            <a href="{{ path('app_avis_list') }}" style="font-size: 14px; padding: 13px 25px; font-weight: 500" class=" btn-primary btn-lg rounded-pill px-4 py-2 shadow">
+                                <i class="fa fa-arrow-left me-2"></i> Back to Reviews
+                            </a>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

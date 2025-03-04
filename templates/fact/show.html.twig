@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Facture{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="mb-4 text-center">Détails de la Facture #{{ facture.id }}</h1>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <table class="table table-bordered text-center mb-0">
+                    <tbody>
+                    <tr>
+                        <th scope="row">ID Facture</th>
+                        <td>{{ facture.id }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Montant</th>
+                        <td>{{ facture.montant }} DT</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date</th>
+                        <td>{{ facture.date ? facture.date|date('Y-m-d') : 'N/A' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Single row of buttons under the table -->
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ path('facture_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+                <a href="{{ path('facture_edit', {'id': facture.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+                {{ include('fact/_delete_form.html.twig', { 'facture': facture }) }}
+
+                <!-- PDF Download Button (under the table) -->
+                <a href="{{ path('pdf_facture', { 'id': facture.id }) }}" class="btn btn-primary">
+                    Télécharger la Facture PDF <i class="bx bxs-cloud-download"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
