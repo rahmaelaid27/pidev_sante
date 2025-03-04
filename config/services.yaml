@@ -6,6 +6,9 @@
 parameters:
 
 services:
+    App\Services\AiService:
+        arguments:
+            $gemini: '@Google\GeminiPhp\Gemini'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
